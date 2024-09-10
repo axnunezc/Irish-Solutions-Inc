@@ -14,6 +14,7 @@ class BaseVec2 {
         BaseVec2();
         BaseVec2(T x, T y);
         BaseVec2(const BaseVec2& other);
+        BaseVec2& operator=(const BaseVec2& other);
 };
 
 #endif
