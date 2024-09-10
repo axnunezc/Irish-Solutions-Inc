@@ -19,4 +19,18 @@ public:
     BaseVec3& operator=(const BaseVec3& other);
 };
 
+class vec3 : public BaseVec3<float> {
+public:
+    vec3();
+    vec3(float x, float y, float z);
+    vec3 cross(const vec3& other) const;
+};
+
+class ivec3 : public BaseVec3<int> {
+public:
+    ivec3();
+    ivec3(int x, int y, int z);
+    int magnitude() const; // int magnitude
+};
+
 #endif // VEC3_H
