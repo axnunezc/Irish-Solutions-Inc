@@ -14,6 +14,7 @@ protected:
 
 public:
     BaseVec3();
+    BaseVec3(T x, T y, T z);
 };
 
 #endif // VEC3_H
