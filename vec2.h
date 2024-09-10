@@ -12,6 +12,7 @@ class BaseVec2 {
 
     public:
         BaseVec2();
+        BaseVec2(T x, T y);
 };
 
 #endif
