@@ -45,6 +45,11 @@ public:
     BaseVec3 operator*(T scalar) const {
         return BaseVec3(x * scalar, y * scalar, z * scalar);
     }
+
+    // Dot product operator
+    T dot(const BaseVec3& other) const {
+        return x * other.x + y * other.y + z * other.z;
+    }
 };
 
 class vec3 : public BaseVec3<float> {
