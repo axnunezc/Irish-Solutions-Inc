@@ -48,6 +48,11 @@ class BaseVec2 {
         T dot(const BaseVec2& other) const {
             return x * other.x + y * other.y;
         }
+
+        // Magnitude function
+        float magnitude() const {
+            return std::sqrt(x * x + y * y);
+        }
 };
 
 class vec2 : public BaseVec2<float> {
