@@ -43,6 +43,11 @@ class BaseVec2 {
         BaseVec2 operator*(T scalar) const {
             return BaseVec2(x * scalar, y * scalar);
         }
+
+        // Dot product operator
+        T dot(const BaseVec2& other) const {
+            return x * other.x + y * other.y;
+        }
 };
 
 class vec2 : public BaseVec2<float> {
