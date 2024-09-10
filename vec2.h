@@ -13,6 +13,7 @@ class BaseVec2 {
     public:
         BaseVec2();
         BaseVec2(T x, T y);
+        BaseVec2(const BaseVec2& other);
 };
 
 #endif
