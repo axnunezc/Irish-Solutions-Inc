@@ -65,6 +65,15 @@ public:
             return BaseVec3(0, 0, 0);
         }
     }
+
+    // Cross product function
+    BaseVec3 cross(const BaseVec3& other) const {
+        return BaseVec3(
+            y * other.z - z * other.y,  // x
+            z * other.x - x * other.z,  // y
+            x * other.y - y * other.x   // z
+        );
+    }
 };
 
 class vec3 : public BaseVec3<float> {
@@ -84,6 +93,11 @@ public:
     ivec3() : BaseVec3() {}
     ivec3(int x, int y, int z) : BaseVec3(x, y, z) {}
     ivec3(const ivec3& other) : BaseVec3(other) {}
+
+    ivec3& operator=(const ivec3& other) {
+        BaseVec3::operator=(other);
+        return *this;
+    }
 
     // Magnitude function
     int magnitude() const {
