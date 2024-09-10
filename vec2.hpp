@@ -53,6 +53,16 @@ class BaseVec2 {
         float magnitude() const {
             return std::sqrt(x * x + y * y);
         }
+
+        // Unit vector function
+        BaseVec2 unit() const {
+            float mag = magnitude();
+            if (mag != 0) {
+                return BaseVec2(x / mag, y / mag)
+            } else {
+                BaseVec2(0, 0);
+            }
+        }
 };
 
 class vec2 : public BaseVec2<float> {
