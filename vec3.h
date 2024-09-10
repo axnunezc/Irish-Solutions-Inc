@@ -16,6 +16,7 @@ public:
     BaseVec3();
     BaseVec3(T x, T y, T z);
     BaseVec3(const BaseVec3& other);
+    BaseVec3& operator=(const BaseVec3& other);
 };
 
 #endif // VEC3_H
