@@ -30,6 +30,11 @@ public:
         }
         return *this;
     }
+
+    // Addition operator
+    BaseVec3 operator+(const BaseVec3& other) const {
+        return BaseVec3(x + other.x, y + other.y, z + other.z);
+    }
 };
 
 class vec3 : public BaseVec3<float> {
