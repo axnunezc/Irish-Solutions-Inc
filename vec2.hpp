@@ -28,6 +28,11 @@ class BaseVec2 {
             }
             return *this;
         }
+
+        // Addition operator
+        BaseVec2 operator+(const BaseVec2& other) const {
+            return BaseVec2(x + other.x, y + other.y);
+        }
 };
 
 class vec2 : public BaseVec2<float> {
