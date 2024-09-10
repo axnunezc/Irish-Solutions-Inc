@@ -85,9 +85,22 @@ public:
     ivec3(int x, int y, int z) : BaseVec3(x, y, z) {}
     ivec3(const ivec3& other) : BaseVec3(other) {}
 
+    // Magnitude function
     int magnitude() const {
         // Manhattan distance
         return std::abs(x) + std::abs(y) + std::abs(z);
+    }
+
+    // Unit vector function
+    ivec3 unit() const {
+        float mag = magnitude();
+        if (mag != 0) {
+            return ivec3(static_cast<int>(std::floor(x / mag)),
+                         static_cast<int>(std::floor(y / mag)),
+                         static_cast<int>(std::floor(z / mag)));
+        } else {
+            return ivec3(0, 0, 0);
+        }
     }
 };
 
