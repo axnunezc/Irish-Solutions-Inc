@@ -30,4 +30,4 @@ public:
     int magnitude() const; // int magnitude
 };
 
-#endif
+#endif // VEC2_H
