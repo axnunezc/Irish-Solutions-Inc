@@ -9,6 +9,9 @@ template <typename T>
 class BaseVec2 {
     protected:
         T components [2];
+
+    public:
+        BaseVec2();
 };
 
 #endif
