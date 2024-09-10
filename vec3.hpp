@@ -50,6 +50,11 @@ public:
     T dot(const BaseVec3& other) const {
         return x * other.x + y * other.y + z * other.z;
     }
+
+    // Magnitude function
+    float magnitude() const {
+        return std::sqrt(x * x + y * y + z * z);
+    }
 };
 
 class vec3 : public BaseVec3<float> {
