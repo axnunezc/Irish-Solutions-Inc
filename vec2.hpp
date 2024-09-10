@@ -58,9 +58,9 @@ class BaseVec2 {
         BaseVec2 unit() const {
             float mag = magnitude();
             if (mag != 0) {
-                return BaseVec2(x / mag, y / mag)
+                return BaseVec2(x / mag, y / mag);
             } else {
-                BaseVec2(0, 0);
+                return BaseVec2(0, 0);
             }
         }
 };
@@ -93,6 +93,15 @@ public:
         return std::abs(x) + std::abs(y);
     }
 
+    // Unit vector function
+    ivec2 unit() const {
+        float mag = magnitude();
+        if (mag != 0) {
+            return ivec2(static_cast<int>(std::floor(x / mag)), static_cast<int>(std::floor(y / mag)));
+        } else {
+            return ivec2(0, 0);
+        }
+    }
 };
 
 #endif // VEC2_HPP
