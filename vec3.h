@@ -11,6 +11,9 @@ template <typename T>
 class BaseVec3 {
 protected:
     T components[3];
+
+public:
+    BaseVec3();
 };
 
 #endif // VEC3_H
