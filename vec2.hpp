@@ -29,11 +29,6 @@ class BaseVec2 {
             return *this;
         }
 
-        // Dot product operator
-        T dot(const BaseVec2& other) const {
-            return x * other.x + y * other.y;
-        }
-
         // Magnitude function
         float magnitude() const {
             return std::sqrt(x * x + y * y);
@@ -73,6 +68,11 @@ public:
 
     vec2 operator*(float scalar) const {
         return vec2(x * scalar, y * scalar);
+    }
+
+    // Dot product operator
+    float dot(const vec2& other) const {
+        return x * other.x + y * other.y;
     }
 
     bool operator==(const vec2& other) const {
