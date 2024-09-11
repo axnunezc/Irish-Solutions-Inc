@@ -60,7 +60,7 @@ public:
     BaseVec3 unit() const {
         float mag = magnitude();
         if (mag != 0) {
-            return BaseVec3(x / mag, y / mag, z / mag) 
+            return BaseVec3(x / mag, y / mag, z / mag);
         } else {
             return BaseVec3(0, 0, 0);
         }
