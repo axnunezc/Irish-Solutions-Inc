@@ -53,6 +53,17 @@ public:
         }
         return result;
     }
+
+    // Transpose function
+    Matrix transpose() const {
+        Matrix result;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                result.components[i][j] = components[j][i];
+            }
+        }
+        return result;
+    }
 };
 
 #endif // MATRIX_HPP
