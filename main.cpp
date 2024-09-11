@@ -99,4 +99,15 @@ int main() {
         std::cout << "ivec2 magnitude function FAILED!\n";
     }
 
+    // ivec2 unit vector
+    expectedIvec2 = ivec2(0, 0);
+    if (testIvec2.unit() == expectedIvec2) {
+        std::cout << "ivec2 unit vector function working\n";
+    } else {
+        std::cout << "ivec2 unit vector function FAILED!\n";
+    }
+
+    // VEC3 UNIT TESTS
+
+    // IVEC3 UNIT TESTS
 }
