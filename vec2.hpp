@@ -7,7 +7,7 @@
 
 template <typename T>
 class BaseVec2 {
-    protected:
+    private:
         T components [2];
 
     public:
@@ -17,14 +17,14 @@ class BaseVec2 {
 
         // Constructors
         BaseVec2() : components{0, 0} {};
-        BaseVec2(T x, T y) : components{x, y} {}
-        BaseVec2(const BaseVec2& other) : components{other.x, other.y} {}
+        BaseVec2(T _x, T _y) : components{_x, _y} {}
+        BaseVec2(const BaseVec2& copy) : components{copy.x, copy.y} {}
         
         // Copy assignment operator
-        BaseVec2& operator=(const BaseVec2& other) {
-            if (this != &other) {
-                components[0] = other.components[0];
-                components[1] = other.components[1];
+        BaseVec2& operator=(const BaseVec2& copy) {
+            if (this != &copy) {
+                components[0] = copy.components[0];
+                components[1] = copy.components[1];
             }
             return *this;
         }
@@ -72,7 +72,9 @@ public:
     vec2(const vec2& other) : BaseVec2(other) {}
 
     vec2& operator=(const vec2& other) {
-        BaseVec2::operator=(other);
+        if (this != &other) {
+            BaseVec2::operator=(other);
+        }
         return *this;
     }
 };
@@ -84,7 +86,9 @@ public:
     ivec2(const ivec2& other) : BaseVec2(other) {}
 
     ivec2& operator=(const ivec2& other) {
-        BaseVec2::operator=(other);
+        if (this != &other) {
+            BaseVec2::operator=(other);
+        }
         return *this;
     }
 

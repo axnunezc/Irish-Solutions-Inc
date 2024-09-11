@@ -10,30 +10,30 @@ private:
 
 public:
     // Constructors
-    Matrix() : components{{1, 0, 0}, {0, 1, 0}, {0, 0, 1}} {} // Identity matrix
+    Matrix() : components{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}} {} // Zero matrix
 
-    Matrix(float data[3][3]) {
+    Matrix(float _data[3][3]) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                components[i][j] = data[i][j];
+                components[i][j] = _data[i][j];
             }
         }
     }
 
-    Matrix(const Matrix& other) {
+    Matrix(const Matrix& copy) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                components[i][j] = other.components[i][j];
+                components[i][j] = copy.components[i][j];
             }
         }
     }
 
     // Assignment operator overload
-    Matrix& operator=(const Matrix& other) {
-        if (this != &other) {
+    Matrix& operator=(const Matrix& copy) {
+        if (this != &copy) {
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 3; ++j) {
-                    components[i][j] = other.components[i][j];
+                    components[i][j] = copy.components[i][j];
                 }
             }
         }
@@ -63,6 +63,18 @@ public:
             }
         }
         return result;
+    }
+
+    // Equality operator overload
+    bool operator==(const Matrix& other) const {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (components[i][j] != other.components[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 };
 
