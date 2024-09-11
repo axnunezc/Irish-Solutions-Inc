@@ -39,6 +39,20 @@ public:
         }
         return *this;
     }
+
+    // Matrix multiplication operator overload
+    Matrix operator*(const Matrix& other) const {
+        Matrix result;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                result.components[i][j] = 0;
+                for (int k = 0; k < 3; ++k) {
+                    result.components[i][j] += components[i][k] * other.components[k][j];
+                }
+            }
+        }
+        return result;
+    }
 };
 
 #endif // MATRIX_HPP
