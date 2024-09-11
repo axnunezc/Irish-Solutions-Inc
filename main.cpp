@@ -65,11 +65,38 @@ int main() {
 
     // ivec2 addition
     ivec2 testIvec2(3, 4);
+    ivec2 expectedIvec2(6, 8);
+    ivec2 resultIvec2 = testIvec2 + testIvec2;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 addition function working\n";
+    } else {
+        std::cout << "ivec2 addition function FAILED!\n";
+    }
+
+    // ivec2 subtraction
+    expectedIvec2 = ivec2(0, 0);
+    resultIvec2 = testIvec2 - testIvec2;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 subtraction function working\n";
+    } else {
+        std::cout << "ivec2 subtraction function FAILED!\n";
+    }
+
+    // ivec2 scalar multiplication
+    expectedIvec2 = ivec2(9, 12);
+    resultIvec2 = testIvec2 * 3;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 scalar multiplication function working\n";
+    } else {
+        std::cout << "ivec2 scalar multiplication function FAILED!\n";
+    }
+
+    // ivec2 magnitude
     int expectedMagnitudeIvec2 = 7;
-    int magnitudeIvec2 = testIvec2.magnitude();
-    if (magnitudeIvec2 == expectedMagnitudeIvec2) {
+    if (testIvec2.magnitude() == expectedMagnitudeIvec2) {
         std::cout << "ivec2 magnitude function working\n";
     } else {
         std::cout << "ivec2 magnitude function FAILED!\n";
     }
+
 }

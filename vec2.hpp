@@ -110,6 +110,11 @@ public:
         return std::abs(x) + std::abs(y);
     }
 
+    // Dot product operator
+    int dot(const ivec2& other) const {
+        return x * other.x + y * other.y;
+    }
+
     // Unit vector function
     ivec2 unit() const {
         float mag = magnitude();
