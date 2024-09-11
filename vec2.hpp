@@ -33,16 +33,6 @@ class BaseVec2 {
         float magnitude() const {
             return std::sqrt(x * x + y * y);
         }
-
-        // Unit vector function
-        BaseVec2 unit() const {
-            float mag = magnitude();
-            if (mag != 0) {
-                return BaseVec2(x / mag, y / mag);
-            } else {
-                return BaseVec2(0, 0);
-            }
-        }
 };
 
 class vec2 : public BaseVec2<float> {
@@ -73,6 +63,16 @@ public:
     // Dot product operator
     float dot(const vec2& other) const {
         return x * other.x + y * other.y;
+    }
+
+    // Unit vector function
+    vec2 unit() const {
+        float mag = magnitude();
+        if (mag != 0) {
+            return vec2(x / mag, y / mag);
+        } else {
+            return vec2(0, 0);
+        }
     }
 
     bool operator==(const vec2& other) const {

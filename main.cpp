@@ -45,6 +45,22 @@ int main() {
         std::cout << "vec2 dot product function FAILED!\n";
     }
 
+    // vec2 magnitude
+    if (testVec2.magnitude() == 1) {
+        std::cout << "vec2 magnitude function working\n";
+    } else {
+        std::cout << "vec2 magnitude function FAILED!\n";
+    }
+
+    // vec2 unit vector
+    testVec2 = vec2(3, 4);
+    expectedVec2 = vec2(0.6, 0.8);
+    if (testVec2.unit() == expectedVec2) {
+        std::cout << "vec2 unit vector function working\n";
+    } else {
+        std::cout << "vec2 unit vector function FAILED!\n";
+    }
+
     // IVEC2 UNIT TESTS
 
     // ivec2 addition
