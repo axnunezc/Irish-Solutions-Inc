@@ -29,21 +29,6 @@ class BaseVec2 {
             return *this;
         }
 
-        // Addition operator
-        BaseVec2 operator+(const BaseVec2& other) const {
-            return BaseVec2(x + other.x, y + other.y);
-        }
-
-        // Subtraction operator
-        BaseVec2 operator-(const BaseVec2& other) const {
-            return BaseVec2(x - other.x, y - other.y);
-        }
-
-        // Scalar multiplication operator
-        BaseVec2 operator*(T scalar) const {
-            return BaseVec2(x * scalar, y * scalar);
-        }
-
         // Dot product operator
         T dot(const BaseVec2& other) const {
             return x * other.x + y * other.y;
@@ -77,6 +62,22 @@ public:
         }
         return *this;
     }
+
+    vec2 operator+(const vec2& other) const {
+        return vec2(x + other.x, y + other.y);
+    }
+
+    vec2 operator-(const vec2& other) const {
+        return vec2(x - other.x, y - other.y);
+    }
+
+    vec2 operator*(float scalar) const {
+        return vec2(x * scalar, y * scalar);
+    }
+
+    bool operator==(const vec2& other) const {
+        return x == other.x && y == other.y;
+    }
 };
 
 class ivec2 : public BaseVec2<int> {
@@ -92,6 +93,18 @@ public:
         return *this;
     }
 
+    ivec2 operator+(const ivec2& other) const {
+        return ivec2(x + other.x, y + other.y);
+    }
+
+    ivec2 operator-(const ivec2& other) const {
+        return ivec2(x - other.x, y - other.y);
+    }
+
+    ivec2 operator*(int scalar) const {
+        return ivec2(x * scalar, y * scalar);
+    }
+
     int magnitude() const {
         // Manhattan distance
         return std::abs(x) + std::abs(y);
@@ -105,6 +118,11 @@ public:
         } else {
             return ivec2(0, 0);
         }
+    }
+
+    // Equality operator
+    bool operator==(const ivec2& other) const {
+        return x == other.x && y == other.y;
     }
 };
 
