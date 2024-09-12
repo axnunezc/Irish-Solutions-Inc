@@ -1,4 +1,4 @@
-// main.cpp
+// IrishSolutionsInc.cpp
 #include <iostream>
 #include "vec2.hpp"
 #include "vec3.hpp"
@@ -289,5 +289,58 @@ int main() {
         std::cout << "vec3 indexing FAILED!\n";
     }
 
-    // 
+    // Self-assignment operators
+    testVec2 = vec2(1.0f, 2.0f);
+    otherVec2 = vec2(3.0f, 4.0f);
+
+    testVec2 += otherVec2;
+    vec2 expectedVec2Add(4.0f, 6.0f);
+    if (testVec2 == expectedVec2Add) {
+        std::cout << "+= operator for vec2 working\n";
+    } else {
+        std::cout << "+= operator for vec2 FAILED!\n";
+    }
+
+    testVec2 -= otherVec2;
+    vec2 expectedVec2Sub(1.0f, 2.0f);
+    if (testVec2 == expectedVec2Sub) {
+        std::cout << "-= operator for vec2 working\n";
+    } else {
+        std::cout << "-= operator for vec2 FAILED!\n";
+    }
+
+    testVec2 *= 2.0f;
+    vec2 expectedVec2Mul(2.0f, 4.0f);
+    if (testVec2 == expectedVec2Mul) {
+        std::cout << "*= operator for vec2 working\n";
+    } else {
+        std::cout << "*= operator for vec2 FAILED!\n";
+    }
+
+    testVec3 = vec3(1.0f, 2.0f, 3.0f);
+    otherVec3 = vec3(4.0f, 5.0f, 6.0f);
+
+    testVec3 += otherVec3;
+    vec3 expectedVec3Add(5.0f, 7.0f, 9.0f);
+    if (testVec3 == expectedVec3Add) {
+        std::cout << "+= operator for vec3 working\n";
+    } else {
+        std::cout << "+= operator for vec3 FAILED!\n";
+    }
+
+    testVec3 -= otherVec3;
+    vec3 expectedVec3Sub(1.0f, 2.0f, 3.0f);
+    if (testVec3 == expectedVec3Sub) {
+        std::cout << "-= operator for vec3 working\n";
+    } else {
+        std::cout << "-= operator for vec3 FAILED!\n";
+    }
+
+    testVec3 *= 2.0f;
+    vec3 expectedVec3Mul(2.0f, 4.0f, 6.0f);
+    if (testVec3 == expectedVec3Mul) {
+        std::cout << "*= operator for vec3 working\n";
+    } else {
+        std::cout << "*= operator for vec3 FAILED!\n";
+    }
 }
