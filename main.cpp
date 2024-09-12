@@ -182,4 +182,32 @@ int main() {
     }
 
     // IVEC3 UNIT TESTS
+
+    // ivec3 addition
+    ivec3 testIvec3(3, 4, 5);
+    ivec3 expectedIvec3(6, 8, 10);
+    ivec3 resultIvec3 = testIvec3 + testIvec3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 addition function working\n";
+    } else {
+        std::cout << "ivec3 addition function FAILED!\n";
+    }
+
+    // ivec3 subtraction
+    expectedIvec3 = ivec3(0, 0, 0);
+    resultIvec3 = testIvec3 - testIvec3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 subtraction function working\n";
+    } else {
+        std::cout << "ivec3 subtraction function FAILED!\n";
+    }
+
+    // ivec3 scalar multiplication
+    expectedIvec3 = ivec3(9, 12, 15);
+    resultIvec3 = testIvec3 * 3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 scalar multiplication function working\n";
+    } else {
+        std::cout << "ivec3 scalar multiplication function FAILED!\n";
+    }
 }

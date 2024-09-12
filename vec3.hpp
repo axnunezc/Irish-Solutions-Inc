@@ -50,7 +50,7 @@ public:
         return *this;
     }
 
-        // Addition operator
+    // Addition operator
     vec3 operator+(const vec3& other) const {
         return vec3(x + other.x, y + other.y, z + other.z);
     }
@@ -108,6 +108,26 @@ public:
         return *this;
     }
 
+    // Addition operator
+    ivec3 operator+(const ivec3& other) const {
+        return ivec3(x + other.x, y + other.y, z + other.z);
+    }
+
+    // Subtraction operator
+    ivec3 operator-(const ivec3& other) const {
+        return ivec3(x - other.x, y - other.y, z - other.z);
+    }
+
+    // Scalar multiplication operator
+    ivec3 operator*(int scalar) const {
+        return ivec3(x * scalar, y * scalar, z * scalar);
+    }
+
+    // Dot product operator
+    int dot(const ivec3& other) const {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
     // Magnitude function
     int magnitude() const {
         // Manhattan distance
@@ -124,6 +144,11 @@ public:
         } else {
             return ivec3(0, 0, 0);
         }
+    }
+
+    // Equality operator
+    bool operator==(const ivec3& other) const {
+        return x == other.x && y == other.y && z == other.z;
     }
 };
 
