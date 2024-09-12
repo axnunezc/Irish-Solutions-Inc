@@ -35,25 +35,6 @@ public:
     float magnitude() const {
         return std::sqrt(x * x + y * y + z * z);
     }
-
-    // Unit vector function
-    BaseVec3 unit() const {
-        float mag = magnitude();
-        if (mag != 0) {
-            return BaseVec3(x / mag, y / mag, z / mag);
-        } else {
-            return BaseVec3(0, 0, 0);
-        }
-    }
-
-    // Cross product function
-    BaseVec3 cross(const BaseVec3& other) const {
-        return BaseVec3(
-            y * other.z - z * other.y,  // x
-            z * other.x - x * other.z,  // y
-            x * other.y - y * other.x   // z
-        );
-    }
 };
 
 class vec3 : public BaseVec3<float> {
@@ -87,6 +68,25 @@ public:
     // Dot product operator
     float dot(const vec3& other) const {
         return x * other.x + y * other.y + z * other.z;
+    }
+
+    // Unit vector function
+    vec3 unit() const {
+        float mag = magnitude();
+        if (mag != 0) {
+            return vec3(x / mag, y / mag, z / mag);
+        } else {
+            return vec3(0, 0, 0);
+        }
+    }
+
+    // Cross product function
+    vec3 cross(const vec3& other) const {
+        return vec3(
+            y * other.z - z * other.y,  // x
+            z * other.x - x * other.z,  // y
+            x * other.y - y * other.x   // z
+        );
     }
 
     // Equality operator

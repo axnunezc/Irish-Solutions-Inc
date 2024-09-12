@@ -163,5 +163,23 @@ int main() {
         std::cout << "vec3 magnitude function FAILED!\n";
     }
 
+    // vec3 unit vector
+    expectedVec3 = vec3(0.6, 0.8, 0.0);
+    if (testVec3.unit() == expectedVec3) {
+        std::cout << "vec3 unit vector function working\n";
+    } else {
+        std::cout << "vec3 unit vector function FAILED!\n";
+    }
+
+    // vec3 cross product
+    otherVec3 = vec3(4.0, 5.0, 6.0);
+    expectedVec3 = vec3(24.0, -18.0, -1.0);
+    resultVec3 = testVec3.cross(otherVec3);
+    if (testVec3.cross(otherVec3) == expectedVec3) {
+        std::cout << "vec3 cross product function working\n";
+    } else {
+        std::cout << "vec3 cross product function FAILED!\n";
+    }
+
     // IVEC3 UNIT TESTS
 }
