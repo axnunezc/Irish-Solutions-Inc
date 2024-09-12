@@ -254,9 +254,9 @@ int main() {
     Matrix resultMatrix = mat1 * mat2;
     Matrix expectedMatrix(data2);
     if (resultMatrix == expectedMatrix) {
-        std::cout << "Matrix multiplication working.\n";
+        std::cout << "Matrix multiplication working\n";
     } else {
-        std::cout << "Matrix multiplication FAILED.\n";
+        std::cout << "Matrix multiplication FAILED!\n";
     }
 
     // matrix transpose
@@ -266,8 +266,18 @@ int main() {
     Matrix transposedMatrix = mat.transpose();
     expectedMatrix = Matrix(data4);
     if (transposedMatrix == expectedMatrix) {
-        std::cout << "Matrix transpose working.\n";
+        std::cout << "Matrix transpose working\n";
     } else {
-        std::cout << "Matrix transpose FAILED.\n";
+        std::cout << "Matrix transpose FAILED!\n";
+    }
+
+    // vec2 indexing
+    testVec2 = vec2(1.5f, 2.5f);
+
+    // Test reading values using the [] operator
+    if (testVec2[0] == 1.5f && testVec2[1] == 2.5f) {
+        std::cout << "vec2 indexing working\n";
+    } else {
+        std::cout << "vec2 indexing FAILED!\n";
     }
 }

@@ -33,6 +33,14 @@ class BaseVec2 {
         float magnitude() const {
             return std::sqrt(x * x + y * y);
         }
+
+        // Overload the [] operator
+        T& operator[](int index) {
+            if (index < 0 || index > 1) {
+                throw std::out_of_range("Index out of range for vec2");
+            }
+            return components[index];
+        }
 };
 
 class vec2 : public BaseVec2<float> {
