@@ -146,6 +146,15 @@ public:
         }
     }
 
+        // Cross product function
+    ivec3 cross(const ivec3& other) const {
+        return ivec3(
+            y * other.z - z * other.y,  // x
+            z * other.x - x * other.z,  // y
+            x * other.y - y * other.x   // z
+        );
+    }
+
     // Equality operator
     bool operator==(const ivec3& other) const {
         return x == other.x && y == other.y && z == other.z;

@@ -225,4 +225,22 @@ int main() {
     } else {
         std::cout << "ivec3 magnitude function FAILED!\n";
     }
+
+    // ivec3 unit vector
+    expectedIvec3 = ivec3(0, 0, 0);
+    if (testIvec3.unit() == expectedIvec3) {
+        std::cout << "ivec3 unit vector function working\n";
+    } else {
+        std::cout << "ivec3 unit vector function FAILED!\n";
+    }
+
+    // ivec3 cross product
+    ivec3 otherIvec3(2, 2, 2);
+    expectedIvec3 = ivec3(-2, 4, -2);
+    resultIvec3 = testIvec3.cross(otherIvec3);
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 cross product function working\n";
+    } else {
+        std::cout << "ivec3 cross product function FAILED!\n";
+    }
 }
