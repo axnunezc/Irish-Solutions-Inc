@@ -258,4 +258,16 @@ int main() {
     } else {
         std::cout << "Matrix multiplication FAILED.\n";
     }
+
+    // matrix transpose
+    float data3[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    float data4[3][3] = {{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};
+    Matrix mat(data3);
+    Matrix transposedMatrix = mat.transpose();
+    expectedMatrix = Matrix(data4);
+    if (transposedMatrix == expectedMatrix) {
+        std::cout << "Matrix transpose working.\n";
+    } else {
+        std::cout << "Matrix transpose FAILED.\n";
+    }
 }
