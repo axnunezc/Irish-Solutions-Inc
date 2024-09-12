@@ -243,4 +243,19 @@ int main() {
     } else {
         std::cout << "ivec3 cross product function FAILED!\n";
     }
+
+    // MATRIX UNIT TESTS
+
+    // matrix multiplication
+    float data1[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    float data2[3][3] = {{2, 3, 4}, {5, 6, 7}, {8, 9, 10}};
+    Matrix mat1(data1);
+    Matrix mat2(data2);
+    Matrix resultMatrix = mat1 * mat2;
+    Matrix expectedMatrix(data2);
+    if (resultMatrix == expectedMatrix) {
+        std::cout << "Matrix multiplication working.\n";
+    } else {
+        std::cout << "Matrix multiplication FAILED.\n";
+    }
 }
