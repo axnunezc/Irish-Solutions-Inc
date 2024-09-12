@@ -109,5 +109,33 @@ int main() {
 
     // VEC3 UNIT TESTS
 
+    // vec3 addition
+    vec3 testVec3(1, 1, 1);
+    vec3 expectedVec3(2, 2, 2);
+    vec3 resultVec3 = testVec3 + testVec3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 addition function working\n";
+    } else {
+        std::cout << "vec3 addition function FAILED!\n";
+    }
+
+    // vec3 subtraction
+    expectedVec3 = vec3(0, 0, 0);
+    resultVec3 = testVec3 - testVec3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 subtraction function working\n";
+    } else {
+        std::cout << "vec3 subtraction function FAILED!\n";
+    }
+
+    // vec3 scalar multiplication
+    expectedVec3 = vec3(3, 3, 3);
+    resultVec3 = testVec3 * 3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 scalar multiplication function working\n";
+    } else {
+        std::cout << "vec3 scalar multiplication function FAILED!\n";
+    }
+
     // IVEC3 UNIT TESTS
 }

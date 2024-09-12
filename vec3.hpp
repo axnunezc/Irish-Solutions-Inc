@@ -31,21 +31,6 @@ public:
         return *this;
     }
 
-    // Addition operator
-    BaseVec3 operator+(const BaseVec3& other) const {
-        return BaseVec3(x + other.x, y + other.y, z + other.z);
-    }
-
-    // Subtraction operator
-    BaseVec3 operator-(const BaseVec3& other) const {
-        return BaseVec3(x - other.x, y - other.y, z - other.z);
-    }
-
-    // Scalar multiplication operator
-    BaseVec3 operator*(T scalar) const {
-        return BaseVec3(x * scalar, y * scalar, z * scalar);
-    }
-
     // Dot product operator
     T dot(const BaseVec3& other) const {
         return x * other.x + y * other.y + z * other.z;
@@ -87,6 +72,26 @@ public:
             BaseVec3::operator=(other);
         }
         return *this;
+    }
+
+        // Addition operator
+    vec3 operator+(const vec3& other) const {
+        return vec3(x + other.x, y + other.y, z + other.z);
+    }
+
+    // Subtraction operator
+    vec3 operator-(const vec3& other) const {
+        return vec3(x - other.x, y - other.y, z - other.z);
+    }
+
+    // Scalar multiplication operator
+    vec3 operator*(int scalar) const {
+        return vec3(x * scalar, y * scalar, z * scalar);
+    }
+
+    // Equality operator
+    bool operator==(const vec3& other) const {
+        return x == other.x && y == other.y && z == other.z;
     }
 };
 
