@@ -288,4 +288,6 @@ int main() {
     } else {
         std::cout << "vec3 indexing FAILED!\n";
     }
+
+    // 
 }

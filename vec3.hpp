@@ -101,6 +101,28 @@ public:
     bool operator==(const vec3& other) const {
         return x == other.x && y == other.y && z == other.z;
     }
+
+    // Self-assignment operators
+    vec3& operator+=(const vec3& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this;
+    }
+
+    vec3& operator-=(const vec3& other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return *this;
+    }
+
+    vec3& operator*=(float scalar) {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return *this;
+    }
 };
 
 class ivec3 : public BaseVec3<int> {
@@ -166,6 +188,28 @@ public:
     // Equality operator
     bool operator==(const ivec3& other) const {
         return x == other.x && y == other.y && z == other.z;
+    }
+
+    // Self-assignment operators
+    ivec3& operator+=(const ivec3& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this;
+    }
+
+    ivec3& operator-=(const ivec3& other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return *this;
+    }
+
+    ivec3& operator*=(int scalar) {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return *this;
     }
 };
 

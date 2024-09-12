@@ -86,6 +86,25 @@ public:
     bool operator==(const vec2& other) const {
         return x == other.x && y == other.y;
     }
+
+    // Self-assignment operators
+    vec2& operator+=(const vec2& other) {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    vec2& operator-=(const vec2& other) {
+        x -= other.x;
+        y -= other.y;
+        return *this;
+    }
+
+    vec2& operator*=(float scalar) {
+        x *= scalar;
+        y *= scalar;
+        return *this;
+    }
 };
 
 class ivec2 : public BaseVec2<int> {
@@ -136,6 +155,25 @@ public:
     // Equality operator
     bool operator==(const ivec2& other) const {
         return x == other.x && y == other.y;
+    }
+
+    // Self-assignment operators
+    ivec2& operator+=(const ivec2& other) {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    ivec2& operator-=(const ivec2& other) {
+        x -= other.x;
+        y -= other.y;
+        return *this;
+    }
+
+    ivec2& operator*=(int scalar) {
+        x *= scalar;
+        y *= scalar;
+        return *this;
     }
 };
 
