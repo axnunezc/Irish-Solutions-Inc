@@ -210,4 +210,19 @@ int main() {
     } else {
         std::cout << "ivec3 scalar multiplication function FAILED!\n";
     }
+
+    // ivec3 dot product
+    int ivec3Result = testIvec3.dot(testIvec3);
+    if (ivec3Result == 50) {
+        std::cout << "ivec3 dot product function working\n";
+    } else {
+        std::cout << "ivec3 dot product function FAILED!\n";
+    }
+
+    // ivec3 magnitude
+    if (testIvec3.magnitude() == 12) {
+        std::cout << "ivec3 magnitude function working\n";
+    } else {
+        std::cout << "ivec3 magnitude function FAILED!\n";
+    }
 }
