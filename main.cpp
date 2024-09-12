@@ -274,10 +274,18 @@ int main() {
     // vec2 indexing
     testVec2 = vec2(1.5f, 2.5f);
 
-    // Test reading values using the [] operator
     if (testVec2[0] == 1.5f && testVec2[1] == 2.5f) {
         std::cout << "vec2 indexing working\n";
     } else {
         std::cout << "vec2 indexing FAILED!\n";
+    }
+
+    // vec3 indexing
+    testVec3 = vec3(1.0f, 2.0f, 3.0f);
+
+    if (testVec3[0] == 1.0f && testVec3[1] == 2.0f && testVec3[2] == 3.0f) {
+        std::cout << "vec3 indexing working\n";
+    } else {
+        std::cout << "vec3 indexing FAILED!\n";
     }
 }
