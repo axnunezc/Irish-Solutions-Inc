@@ -31,11 +31,6 @@ public:
         return *this;
     }
 
-    // Dot product operator
-    T dot(const BaseVec3& other) const {
-        return x * other.x + y * other.y + z * other.z;
-    }
-
     // Magnitude function
     float magnitude() const {
         return std::sqrt(x * x + y * y + z * z);
@@ -87,6 +82,11 @@ public:
     // Scalar multiplication operator
     vec3 operator*(int scalar) const {
         return vec3(x * scalar, y * scalar, z * scalar);
+    }
+
+    // Dot product operator
+    float dot(const vec3& other) const {
+        return x * other.x + y * other.y + z * other.z;
     }
 
     // Equality operator

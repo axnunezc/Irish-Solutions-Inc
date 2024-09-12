@@ -38,15 +38,15 @@ int main() {
 
     // vec2 dot product
     vec2 otherVec2 = vec2(2, 1);
-    float result = testVec2.dot(otherVec2);
-    if (result == 2) {
+    float vec2Result = testVec2.dot(otherVec2);
+    if (vec2Result == 2.0) {
         std::cout << "vec2 dot product function working\n";
     } else {
         std::cout << "vec2 dot product function FAILED!\n";
     }
 
     // vec2 magnitude
-    if (testVec2.magnitude() == 1) {
+    if (testVec2.magnitude() == 1.0) {
         std::cout << "vec2 magnitude function working\n";
     } else {
         std::cout << "vec2 magnitude function FAILED!\n";
@@ -89,6 +89,15 @@ int main() {
         std::cout << "ivec2 scalar multiplication function working\n";
     } else {
         std::cout << "ivec2 scalar multiplication function FAILED!\n";
+    }
+
+    // ivec2 dot product
+    ivec2 otherIvec2 = ivec2(2, 1);
+    int ivec2Result = testIvec2.dot(otherIvec2);
+    if (ivec2Result == 10) {
+        std::cout << "ivec2 dot product function working\n";
+    } else {
+        std::cout << "ivec2 dot product function FAILED!\n";
     }
 
     // ivec2 magnitude
@@ -135,6 +144,23 @@ int main() {
         std::cout << "vec3 scalar multiplication function working\n";
     } else {
         std::cout << "vec3 scalar multiplication function FAILED!\n";
+    }
+
+    // vec3 dot product
+    vec3 otherVec3 = vec3(2, 2, 2);
+    float vec3Result = testVec3.dot(otherVec3);
+    if (vec3Result == 6.0) {
+        std::cout << "vec3 dot product function working\n";
+    } else {
+        std::cout << "vec3 dot product function FAILED!\n";
+    }
+
+    // vec3 magnitude
+    testVec3 = vec3(3, 4, 0);
+    if (testVec3.magnitude() == 5.0) {
+        std::cout << "vec3 magnitude function working\n";
+    } else {
+        std::cout << "vec3 magnitude function FAILED!\n";
     }
 
     // IVEC3 UNIT TESTS
