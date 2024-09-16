@@ -1,0 +1,346 @@
+// IrishSolutionsInc.cpp
+#include <iostream>
+#include "vec2.hpp"
+#include "vec3.hpp"
+#include "matrix.hpp"
+
+int main() {
+    // VEC2 UNIT TESTS
+
+    // vec2 addition
+    vec2 testVec2(1, 0);
+    vec2 expectedVec2(2, 0);
+    vec2 resultVec2 = testVec2 + testVec2;
+    if (expectedVec2 == resultVec2) {
+        std::cout << "vec2 addition function working\n";
+    } else {
+        std::cout << "vec2 addition function FAILED!\n";
+    }
+
+    // vec2 subtraction
+    expectedVec2 = vec2(0, 0);
+    resultVec2 = testVec2 - testVec2;
+    if (expectedVec2 == resultVec2) {
+        std::cout << "vec2 subtraction function working\n";
+    } else {
+        std::cout << "vec2 subtraction function FAILED!\n";
+    }
+
+    // vec2 scalar multiplication
+    expectedVec2 = vec2(3, 0);
+    resultVec2 = testVec2 * 3;
+
+    if (expectedVec2 == resultVec2) {
+        std::cout << "vec2 scalar multiplication function working\n";
+    } else {
+        std::cout << "vec2 scalar multiplication function FAILED!\n";
+    }
+
+    // vec2 dot product
+    vec2 otherVec2 = vec2(2, 1);
+    float vec2Result = testVec2.dot(otherVec2);
+    if (vec2Result == 2.0) {
+        std::cout << "vec2 dot product function working\n";
+    } else {
+        std::cout << "vec2 dot product function FAILED!\n";
+    }
+
+    // vec2 magnitude
+    if (testVec2.magnitude() == 1.0) {
+        std::cout << "vec2 magnitude function working\n";
+    } else {
+        std::cout << "vec2 magnitude function FAILED!\n";
+    }
+
+    // vec2 unit vector
+    testVec2 = vec2(3, 4);
+    expectedVec2 = vec2(0.6, 0.8);
+    if (testVec2.unit() == expectedVec2) {
+        std::cout << "vec2 unit vector function working\n";
+    } else {
+        std::cout << "vec2 unit vector function FAILED!\n";
+    }
+
+    // IVEC2 UNIT TESTS
+
+    // ivec2 addition
+    ivec2 testIvec2(3, 4);
+    ivec2 expectedIvec2(6, 8);
+    ivec2 resultIvec2 = testIvec2 + testIvec2;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 addition function working\n";
+    } else {
+        std::cout << "ivec2 addition function FAILED!\n";
+    }
+
+    // ivec2 subtraction
+    expectedIvec2 = ivec2(0, 0);
+    resultIvec2 = testIvec2 - testIvec2;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 subtraction function working\n";
+    } else {
+        std::cout << "ivec2 subtraction function FAILED!\n";
+    }
+
+    // ivec2 scalar multiplication
+    expectedIvec2 = ivec2(9, 12);
+    resultIvec2 = testIvec2 * 3;
+    if (resultIvec2 == expectedIvec2) {
+        std::cout << "ivec2 scalar multiplication function working\n";
+    } else {
+        std::cout << "ivec2 scalar multiplication function FAILED!\n";
+    }
+
+    // ivec2 dot product
+    ivec2 otherIvec2 = ivec2(2, 1);
+    int ivec2Result = testIvec2.dot(otherIvec2);
+    if (ivec2Result == 10) {
+        std::cout << "ivec2 dot product function working\n";
+    } else {
+        std::cout << "ivec2 dot product function FAILED!\n";
+    }
+
+    // ivec2 magnitude
+    int expectedMagnitudeIvec2 = 7;
+    if (testIvec2.magnitude() == expectedMagnitudeIvec2) {
+        std::cout << "ivec2 magnitude function working\n";
+    } else {
+        std::cout << "ivec2 magnitude function FAILED!\n";
+    }
+
+    // ivec2 unit vector
+    expectedIvec2 = ivec2(0, 0);
+    if (testIvec2.unit() == expectedIvec2) {
+        std::cout << "ivec2 unit vector function working\n";
+    } else {
+        std::cout << "ivec2 unit vector function FAILED!\n";
+    }
+
+    // VEC3 UNIT TESTS
+
+    // vec3 addition
+    vec3 testVec3(1, 1, 1);
+    vec3 expectedVec3(2, 2, 2);
+    vec3 resultVec3 = testVec3 + testVec3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 addition function working\n";
+    } else {
+        std::cout << "vec3 addition function FAILED!\n";
+    }
+
+    // vec3 subtraction
+    expectedVec3 = vec3(0, 0, 0);
+    resultVec3 = testVec3 - testVec3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 subtraction function working\n";
+    } else {
+        std::cout << "vec3 subtraction function FAILED!\n";
+    }
+
+    // vec3 scalar multiplication
+    expectedVec3 = vec3(3, 3, 3);
+    resultVec3 = testVec3 * 3;
+    if (expectedVec3 == resultVec3) {
+        std::cout << "vec3 scalar multiplication function working\n";
+    } else {
+        std::cout << "vec3 scalar multiplication function FAILED!\n";
+    }
+
+    // vec3 dot product
+    vec3 otherVec3 = vec3(2, 2, 2);
+    float vec3Result = testVec3.dot(otherVec3);
+    if (vec3Result == 6.0) {
+        std::cout << "vec3 dot product function working\n";
+    } else {
+        std::cout << "vec3 dot product function FAILED!\n";
+    }
+
+    // vec3 magnitude
+    testVec3 = vec3(3, 4, 0);
+    if (testVec3.magnitude() == 5.0) {
+        std::cout << "vec3 magnitude function working\n";
+    } else {
+        std::cout << "vec3 magnitude function FAILED!\n";
+    }
+
+    // vec3 unit vector
+    expectedVec3 = vec3(0.6, 0.8, 0.0);
+    if (testVec3.unit() == expectedVec3) {
+        std::cout << "vec3 unit vector function working\n";
+    } else {
+        std::cout << "vec3 unit vector function FAILED!\n";
+    }
+
+    // vec3 cross product
+    otherVec3 = vec3(4.0, 5.0, 6.0);
+    expectedVec3 = vec3(24.0, -18.0, -1.0);
+    resultVec3 = testVec3.cross(otherVec3);
+    if (testVec3.cross(otherVec3) == expectedVec3) {
+        std::cout << "vec3 cross product function working\n";
+    } else {
+        std::cout << "vec3 cross product function FAILED!\n";
+    }
+
+    // IVEC3 UNIT TESTS
+
+    // ivec3 addition
+    ivec3 testIvec3(3, 4, 5);
+    ivec3 expectedIvec3(6, 8, 10);
+    ivec3 resultIvec3 = testIvec3 + testIvec3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 addition function working\n";
+    } else {
+        std::cout << "ivec3 addition function FAILED!\n";
+    }
+
+    // ivec3 subtraction
+    expectedIvec3 = ivec3(0, 0, 0);
+    resultIvec3 = testIvec3 - testIvec3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 subtraction function working\n";
+    } else {
+        std::cout << "ivec3 subtraction function FAILED!\n";
+    }
+
+    // ivec3 scalar multiplication
+    expectedIvec3 = ivec3(9, 12, 15);
+    resultIvec3 = testIvec3 * 3;
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 scalar multiplication function working\n";
+    } else {
+        std::cout << "ivec3 scalar multiplication function FAILED!\n";
+    }
+
+    // ivec3 dot product
+    int ivec3Result = testIvec3.dot(testIvec3);
+    if (ivec3Result == 50) {
+        std::cout << "ivec3 dot product function working\n";
+    } else {
+        std::cout << "ivec3 dot product function FAILED!\n";
+    }
+
+    // ivec3 magnitude
+    if (testIvec3.magnitude() == 12) {
+        std::cout << "ivec3 magnitude function working\n";
+    } else {
+        std::cout << "ivec3 magnitude function FAILED!\n";
+    }
+
+    // ivec3 unit vector
+    expectedIvec3 = ivec3(0, 0, 0);
+    if (testIvec3.unit() == expectedIvec3) {
+        std::cout << "ivec3 unit vector function working\n";
+    } else {
+        std::cout << "ivec3 unit vector function FAILED!\n";
+    }
+
+    // ivec3 cross product
+    ivec3 otherIvec3(2, 2, 2);
+    expectedIvec3 = ivec3(-2, 4, -2);
+    resultIvec3 = testIvec3.cross(otherIvec3);
+    if (resultIvec3 == expectedIvec3) {
+        std::cout << "ivec3 cross product function working\n";
+    } else {
+        std::cout << "ivec3 cross product function FAILED!\n";
+    }
+
+    // MATRIX UNIT TESTS
+
+    // matrix multiplication
+    float data1[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+    float data2[3][3] = {{2, 3, 4}, {5, 6, 7}, {8, 9, 10}};
+    Matrix mat1(data1);
+    Matrix mat2(data2);
+    Matrix resultMatrix = mat1 * mat2;
+    Matrix expectedMatrix(data2);
+    if (resultMatrix == expectedMatrix) {
+        std::cout << "Matrix multiplication working\n";
+    } else {
+        std::cout << "Matrix multiplication FAILED!\n";
+    }
+
+    // matrix transpose
+    float data3[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    float data4[3][3] = {{1, 4, 7}, {2, 5, 8}, {3, 6, 9}};
+    Matrix mat(data3);
+    Matrix transposedMatrix = mat.transpose();
+    expectedMatrix = Matrix(data4);
+    if (transposedMatrix == expectedMatrix) {
+        std::cout << "Matrix transpose working\n";
+    } else {
+        std::cout << "Matrix transpose FAILED!\n";
+    }
+
+    // vec2 indexing
+    testVec2 = vec2(1.5f, 2.5f);
+
+    if (testVec2[0] == 1.5f && testVec2[1] == 2.5f) {
+        std::cout << "vec2 indexing working\n";
+    } else {
+        std::cout << "vec2 indexing FAILED!\n";
+    }
+
+    // vec3 indexing
+    testVec3 = vec3(1.0f, 2.0f, 3.0f);
+
+    if (testVec3[0] == 1.0f && testVec3[1] == 2.0f && testVec3[2] == 3.0f) {
+        std::cout << "vec3 indexing working\n";
+    } else {
+        std::cout << "vec3 indexing FAILED!\n";
+    }
+
+    // Self-assignment operators
+    testVec2 = vec2(1.0f, 2.0f);
+    otherVec2 = vec2(3.0f, 4.0f);
+
+    testVec2 += otherVec2;
+    vec2 expectedVec2Add(4.0f, 6.0f);
+    if (testVec2 == expectedVec2Add) {
+        std::cout << "+= operator for vec2 working\n";
+    } else {
+        std::cout << "+= operator for vec2 FAILED!\n";
+    }
+
+    testVec2 -= otherVec2;
+    vec2 expectedVec2Sub(1.0f, 2.0f);
+    if (testVec2 == expectedVec2Sub) {
+        std::cout << "-= operator for vec2 working\n";
+    } else {
+        std::cout << "-= operator for vec2 FAILED!\n";
+    }
+
+    testVec2 *= 2.0f;
+    vec2 expectedVec2Mul(2.0f, 4.0f);
+    if (testVec2 == expectedVec2Mul) {
+        std::cout << "*= operator for vec2 working\n";
+    } else {
+        std::cout << "*= operator for vec2 FAILED!\n";
+    }
+
+    testVec3 = vec3(1.0f, 2.0f, 3.0f);
+    otherVec3 = vec3(4.0f, 5.0f, 6.0f);
+
+    testVec3 += otherVec3;
+    vec3 expectedVec3Add(5.0f, 7.0f, 9.0f);
+    if (testVec3 == expectedVec3Add) {
+        std::cout << "+= operator for vec3 working\n";
+    } else {
+        std::cout << "+= operator for vec3 FAILED!\n";
+    }
+
+    testVec3 -= otherVec3;
+    vec3 expectedVec3Sub(1.0f, 2.0f, 3.0f);
+    if (testVec3 == expectedVec3Sub) {
+        std::cout << "-= operator for vec3 working\n";
+    } else {
+        std::cout << "-= operator for vec3 FAILED!\n";
+    }
+
+    testVec3 *= 2.0f;
+    vec3 expectedVec3Mul(2.0f, 4.0f, 6.0f);
+    if (testVec3 == expectedVec3Mul) {
+        std::cout << "*= operator for vec3 working\n";
+    } else {
+        std::cout << "*= operator for vec3 FAILED!\n";
+    }
+}
