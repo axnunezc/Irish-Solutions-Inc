@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-template <typename T, typename Derived>
+template <typename T>
 class BaseVec2 {
 protected:
     T components[2];
@@ -30,7 +30,7 @@ public:
     }
 
     // Magnitude function
-    float magnitude() const {
+    T magnitude() const {
         return std::sqrt(x * x + y * y);
     }
 
@@ -43,86 +43,76 @@ public:
     }
 
     // Arithmetic operations
-    Derived operator+(const Derived& other) const {
-        return Derived(x + other.x, y + other.y);
+    BaseVec2 operator+(const BaseVec2& other) const {
+        return BaseVec2(x + other.x, y + other.y);
     }
 
-    Derived operator-(const Derived& other) const {
-        return Derived(x - other.x, y - other.y);
+    BaseVec2 operator-(const BaseVec2& other) const {
+        return BaseVec2(x - other.x, y - other.y);
     }
 
-    Derived operator*(T scalar) const {
-        return Derived(x * scalar, y * scalar);
+    BaseVec2 operator*(T scalar) const {
+        return BaseVec2(x * scalar, y * scalar);
     }
 
-    Derived& operator+=(const Derived& other) {
+    BaseVec2& operator+=(const BaseVec2& other) {
         x += other.x;
         y += other.y;
-        return static_cast<Derived&>(*this);
+        return (*this);
     }
 
-    Derived& operator-=(const Derived& other) {
+    BaseVec2& operator-=(const BaseVec2& other) {
         x -= other.x;
         y -= other.y;
-        return static_cast<Derived&>(*this);
+        return (*this);
     }
 
-    Derived& operator*=(T scalar) {
+    BaseVec2& operator*=(T scalar) {
         x *= scalar;
         y *= scalar;
-        return static_cast<Derived&>(*this);
+        return (*this);
     }
 
     // Dot product
-    T dot(const Derived& other) const {
+    T dot(const BaseVec2& other) const {
         return x * other.x + y * other.y;
     }
 
     // Equality operator
-    bool operator==(const Derived& other) const {
+    bool operator==(const BaseVec2& other) const {
         return x == other.x && y == other.y;
     }
 
     // Unit vector function
-    Derived unit() const {
+    BaseVec2 unit() const {
         float mag = magnitude();
         if (mag != 0) {
-            return Derived(x / mag, y / mag);
+            return BaseVec2(x / mag, y / mag);
         } else {
-            return Derived(0, 0);
+            return BaseVec2(0, 0);
         }
     }
 };
 
-class vec2 : public BaseVec2<float, vec2> {
-public:
-    vec2() : BaseVec2() {}
-    vec2(float x, float y) : BaseVec2(x, y) {}
-    vec2(const vec2& other) : BaseVec2(other) {}
-};
+typedef BaseVec2<float> vec2;
 
-class ivec2 : public BaseVec2<int, ivec2> {
-public:
-    ivec2() : BaseVec2() {}
-    ivec2(int x, int y) : BaseVec2(x, y) {}
-    ivec2(const ivec2& other) : BaseVec2(other) {}
+template <>
+int BaseVec2<int>::magnitude() const {
+    // Manhattan distance
+    return std::abs(x) + std::abs(y);
+}
 
-    // Magnitude specialization for ivec2
-    int magnitude() const {
-        // Manhattan distance
-        return std::abs(x) + std::abs(y);
+template <>
+BaseVec2<int> BaseVec2<int>::unit() const {
+    float mag = magnitude();
+    if (mag != 0) {
+        return BaseVec2(static_cast<int>(std::floor(x / mag)),
+                        static_cast<int>(std::floor(y / mag)));
+    } else {
+        return BaseVec2(0, 0);
     }
+}
 
-    // Unit vector specialization for ivec2
-    ivec2 unit() const {
-        float mag = magnitude();
-        if (mag != 0) {
-            return ivec2(static_cast<int>(std::floor(x / mag)),
-                         static_cast<int>(std::floor(y / mag)));
-        } else {
-            return ivec2(0, 0);
-        }
-    }
-};
+typedef BaseVec2<int> ivec2;
 
 #endif // VEC2_HPP
