@@ -5,7 +5,7 @@
 #include <iostream>
 #include <cmath>
 
-template <typename T>
+template <typename T, typename Derived>
 class BaseVec3 {
 private:
     T components[3];
@@ -43,54 +43,49 @@ public:
         }
         return components[index];
     }
-};
 
-class vec3 : public BaseVec3<float> {
-public:
-    vec3() : BaseVec3() {}
-    vec3(float x, float y, float z) : BaseVec3(x, y, z) {}
-    vec3(const vec3& other) : BaseVec3(other) {}
-
-    vec3& operator=(const vec3& other) {
-        if (this != &other) {
-            BaseVec3::operator=(other);
-        }
-        return *this;
+    // Arithmetic operations
+    Derived operator+(const Derived& other) const {
+        return Derived(x + other.x, y + other.y, z + other.z);
     }
 
-    // Addition operator
-    vec3 operator+(const vec3& other) const {
-        return vec3(x + other.x, y + other.y, z + other.z);
+    Derived operator-(const Derived& other) const {
+        return Derived(x - other.x, y - other.y, z - other.z);
     }
 
-    // Subtraction operator
-    vec3 operator-(const vec3& other) const {
-        return vec3(x - other.x, y - other.y, z - other.z);
+    Derived operator*(T scalar) const {
+        return Derived(x * scalar, y * scalar, z * scalar);
     }
 
-    // Scalar multiplication operator
-    vec3 operator*(int scalar) const {
-        return vec3(x * scalar, y * scalar, z * scalar);
+    Derived& operator+=(const Derived& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return static_cast<Derived&>(*this);
     }
 
-    // Dot product operator
-    float dot(const vec3& other) const {
+    Derived& operator-=(const Derived& other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return static_cast<Derived&>(*this);
+    }
+
+    Derived& operator*=(T scalar) {
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        return static_cast<Derived&>(*this);
+    }
+
+    // Dot product
+    T dot(const Derived& other) const {
         return x * other.x + y * other.y + z * other.z;
     }
 
-    // Unit vector function
-    vec3 unit() const {
-        float mag = magnitude();
-        if (mag != 0) {
-            return vec3(x / mag, y / mag, z / mag);
-        } else {
-            return vec3(0, 0, 0);
-        }
-    }
-
-    // Cross product function
-    vec3 cross(const vec3& other) const {
-        return vec3(
+    // Cross product (only meaningful for 3D vectors)
+    Derived cross(const Derived& other) const {
+        return Derived(
             y * other.z - z * other.y,  // x
             z * other.x - x * other.z,  // y
             x * other.y - y * other.x   // z
@@ -98,73 +93,41 @@ public:
     }
 
     // Equality operator
-    bool operator==(const vec3& other) const {
+    bool operator==(const Derived& other) const {
         return x == other.x && y == other.y && z == other.z;
     }
 
-    // Self-assignment operators
-    vec3& operator+=(const vec3& other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        return *this;
-    }
-
-    vec3& operator-=(const vec3& other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-        return *this;
-    }
-
-    vec3& operator*=(float scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        return *this;
+    // Unit vector function
+    Derived unit() const {
+        float mag = magnitude();
+        if (mag != 0) {
+            return Derived(x / mag, y / mag, z / mag);
+        } else {
+            return Derived(0, 0, 0);
+        }
     }
 };
 
-class ivec3 : public BaseVec3<int> {
+class vec3 : public BaseVec3<float, vec3> {
+public:
+    vec3() : BaseVec3() {}
+    vec3(float x, float y, float z) : BaseVec3(x, y, z) {}
+    vec3(const vec3& other) : BaseVec3(other) {}
+};
+
+class ivec3 : public BaseVec3<int, ivec3> {
 public:
     ivec3() : BaseVec3() {}
     ivec3(int x, int y, int z) : BaseVec3(x, y, z) {}
     ivec3(const ivec3& other) : BaseVec3(other) {}
 
-    ivec3& operator=(const ivec3& other) {
-        if (this != &other) {
-            BaseVec3::operator=(other);
-        }
-        return *this;
-    }
-
-    // Addition operator
-    ivec3 operator+(const ivec3& other) const {
-        return ivec3(x + other.x, y + other.y, z + other.z);
-    }
-
-    // Subtraction operator
-    ivec3 operator-(const ivec3& other) const {
-        return ivec3(x - other.x, y - other.y, z - other.z);
-    }
-
-    // Scalar multiplication operator
-    ivec3 operator*(int scalar) const {
-        return ivec3(x * scalar, y * scalar, z * scalar);
-    }
-
-    // Dot product operator
-    int dot(const ivec3& other) const {
-        return x * other.x + y * other.y + z * other.z;
-    }
-
-    // Magnitude function
+    // Magnitude specialization for ivec3
     int magnitude() const {
         // Manhattan distance
         return std::abs(x) + std::abs(y) + std::abs(z);
     }
 
-    // Unit vector function
+    // Unit vector specialization for ivec3
     ivec3 unit() const {
         float mag = magnitude();
         if (mag != 0) {
@@ -174,42 +137,6 @@ public:
         } else {
             return ivec3(0, 0, 0);
         }
-    }
-
-        // Cross product function
-    ivec3 cross(const ivec3& other) const {
-        return ivec3(
-            y * other.z - z * other.y,  // x
-            z * other.x - x * other.z,  // y
-            x * other.y - y * other.x   // z
-        );
-    }
-
-    // Equality operator
-    bool operator==(const ivec3& other) const {
-        return x == other.x && y == other.y && z == other.z;
-    }
-
-    // Self-assignment operators
-    ivec3& operator+=(const ivec3& other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        return *this;
-    }
-
-    ivec3& operator-=(const ivec3& other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-        return *this;
-    }
-
-    ivec3& operator*=(int scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        return *this;
     }
 };
 
