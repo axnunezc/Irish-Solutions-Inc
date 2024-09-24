@@ -5,6 +5,8 @@
 
 class Screen {
     private:
+    unsigned int width, height;
+    SDL_Surface* surface;
 
     public:
 };
