@@ -26,11 +26,20 @@ class Screen {
 
         // Color a single pixel
         void setPixel(const vec2& pos, const vec3& color) {
-            if (pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height) {
-                uint32_t* pixels = (uint32_t*)surface->pixels;
-                uint32_t pixelColor = SDL_MapRGB(surface->format, color.x, color.y, color.z);
-                pixels[pos.y * width + pos.x] = pixelColor;
+            int x = static_cast<int>(std::round(position.x));
+            int y = static_cast<int>(std::round(position.y));
+
+            Uint8 r = static_cast<Uint8>(std::round(color.x));
+            Uint8 g = static_cast<Uint8>(std::round(color.y));
+            Uint8 b = static_cast<Uint8>(std::round(color.z));
+
+            if (x < 0 || x >= screenWidth || y < 0 || y >= screenHeight) {
+                return; // Out of bounds, do nothing
             }
+
+            Uint32* pixels = (Uint32*)surface->pixels;
+            Uint32 pixelColor = SDL_MapRGB(surface->format, r, g, b);
+            pixels[y * (surface->pitch / 4) + x] = pixelColor;
         }
 
         // Line Drawing
