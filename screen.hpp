@@ -25,11 +25,40 @@ class Screen {
         }
 
         // Color a single pixel
-        void setPixel(const ivec2& pos, const ivec3& color) {
+        void setPixel(const vec2& pos, const vec3& color) {
             if (pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height) {
                 uint32_t* pixels = (uint32_t*)surface->pixels;
                 uint32_t pixelColor = SDL_MapRGB(surface->format, color.x, color.y, color.z);
                 pixels[pos.y * width + pos.x] = pixelColor;
+            }
+        }
+
+        // Line Drawing
+        void drawLine(vec2 start, vec2 end, vec3 color) {
+            int x1 = static_cast<int>(std::round(start.x));
+            int y1 = static_cast<int>(std::round(start.y));
+            int x2 = static_cast<int>(std::round(end.x));
+            int y2 = static_cast<int>(std::round(end.y));
+
+            int dx = std::abs(x2 - x1);
+            int dy = std::abs(y2 - y1);
+            int sx = (x1 < x2) ? 1 : -1;
+            int sy = (y1 < y2) ? 1 : -1;
+            int err = dx - dy;
+
+            while (true) {
+                setPixel({x1, y1}, color);  // Use floating-point `vec2` and `vec3`
+
+                if (x1 == x2 && y1 == y2) break;
+                int e2 = err * 2;
+                if (e2 > -dy) {
+                    err -= dy;
+                    x1 += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    y1 += sy;
+                }
             }
         }
 
