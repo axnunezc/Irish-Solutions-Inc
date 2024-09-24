@@ -47,7 +47,7 @@ class Screen {
             int err = dx - dy;
 
             while (true) {
-                setPixel({x1, y1}, color);  // Use floating-point `vec2` and `vec3`
+                setPixel({x1, y1}, color);
 
                 if (x1 == x2 && y1 == y2) break;
                 int e2 = err * 2;
@@ -59,6 +59,24 @@ class Screen {
                     err += dx;
                     y1 += sy;
                 }
+            }
+        }
+
+        // Box Drawing
+        void drawBox(vec2 min, vec2 max, vec3 color) {
+            int x1 = static_cast<int>(std::round(std::min(min.x, max.x)));
+            int y1 = static_cast<int>(std::round(std::min(min.y, max.y)));
+            int x2 = static_cast<int>(std::round(std::max(min.x, max.x)));
+            int y2 = static_cast<int>(std::round(std::max(min.y, max.y)));
+
+            for (int x = x1; x <= x2; ++x) {
+                setPixel({x, y1}, color);
+                setPixel({x, y2}, color);
+            }
+
+            for (int y = y1; y <= y2; ++y) {
+                setPixel({x1, y}, color);
+                setPixel({x2, y}, color);
             }
         }
 
