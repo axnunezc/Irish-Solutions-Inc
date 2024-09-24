@@ -18,6 +18,11 @@ class Screen {
         }
 
         // Class destructor
+        ~Screen() {
+            if (surface) {
+                SDL_FreeSurface(surface);
+            }
+        }
 
         // Color a single pixel
         void setPixel(const ivec2& pos, const ivec3& color) {
