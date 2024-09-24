@@ -91,6 +91,25 @@ class Screen {
 
         // Blit to other surface
         void blitTo(SDL_Surface* other) {
-        SDL_BlitSurface(surface, nullptr, other, nullptr);
-    }
+            SDL_BlitSurface(surface, nullptr, other, nullptr);
+        }
+
+        // setPixel overload to support ivec2 and ivec3
+        void setPixel(ivec2 position, ivec3 color) {
+            int x = position.x;
+            int y = position.y;
+
+            Uint8 r = static_cast<Uint8>(color.x);
+            Uint8 g = static_cast<Uint8>(color.y);
+            Uint8 b = static_cast<Uint8>(color.z);
+
+            if (x < 0 || x >= screenWidth || y < 0 || y >= screenHeight) {
+                return; // Out of bounds, do nothing
+            }
+
+            Uint32* pixels = (Uint32*)surface->pixels;
+            Uint32 pixelColor = SDL_MapRGB(surface->format, r, g, b);
+            pixels[y * (surface->pitch / 4) + x] = pixelColor;
+        }
+
 };
