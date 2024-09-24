@@ -17,4 +17,9 @@ class Screen {
                 pixels[pos.y * width + pos.x] = pixelColor;
             }
         }
+
+        // Blit to other surface
+        void blitTo(SDL_Surface* other) {
+        SDL_BlitSurface(surface, nullptr, other, nullptr);
+    }
 };
