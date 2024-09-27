@@ -39,12 +39,12 @@ public:
         int x = static_cast<int>(std::round(pos.x));
         int y = static_cast<int>(std::round(pos.y));
 
-        Uint8 r = static_cast<u_int8_t>(std::round(color.x));
-        Uint8 g = static_cast<u_int8_t>(std::round(color.y));
-        Uint8 b = static_cast<u_int8_t>(std::round(color.z));
+        u_int8_t r = static_cast<u_int8_t>(std::round(color.x));
+        u_int8_t g = static_cast<u_int8_t>(std::round(color.y));
+        u_int8_t b = static_cast<u_int8_t>(std::round(color.z));
 
         if (x < 0 || x >= width || y < 0 || y >= height) {
-            return; // Out of bounds, do nothing
+            return; // Invalid coordinates
         }
 
         uint32_t* pixels = (uint32_t*)surface->pixels;
@@ -83,6 +83,7 @@ public:
 
     // Box Drawing
     void drawBox(vec2 min, vec2 max, vec3 color) {
+        // Make sure min and max are accurate
         int x1 = static_cast<int>(std::round(std::min(min.x, max.x)));
         int y1 = static_cast<int>(std::round(std::min(min.y, max.y)));
         int x2 = static_cast<int>(std::round(std::max(min.x, max.x)));
@@ -114,7 +115,7 @@ public:
         Uint8 b = static_cast<u_int8_t>(color.z);
 
         if (x < 0 || x >= width || y < 0 || y >= height) {
-            return;
+            return; // Invalid coordinates
         }
 
         uint32_t* pixels = (uint32_t*)surface->pixels;
