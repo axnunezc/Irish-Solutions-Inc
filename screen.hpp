@@ -54,6 +54,10 @@ public:
 
     // Line Drawing
     void drawLine(vec2 start, vec2 end, vec3 color) {
+        if (start.x > end.x || (start.x == end.x && start.y > end.y)) {
+            std::swap(start, end);
+        }
+
         int x1 = static_cast<int>(std::round(start.x));
         int y1 = static_cast<int>(std::round(start.y));
         int x2 = static_cast<int>(std::round(end.x));
