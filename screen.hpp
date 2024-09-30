@@ -1,3 +1,7 @@
+// screen.hpp
+#ifndef SCREEN_HPP
+#define SCREEN_HPP
+
 #include <SDL.h>
 #include <iostream>
 #include "vec2.hpp"
@@ -39,9 +43,9 @@ public:
         int x = static_cast<int>(std::round(pos.x));
         int y = static_cast<int>(std::round(pos.y));
 
-        u_int8_t r = static_cast<u_int8_t>(std::round(color.x));
-        u_int8_t g = static_cast<u_int8_t>(std::round(color.y));
-        u_int8_t b = static_cast<u_int8_t>(std::round(color.z));
+        uint8_t r = static_cast<uint8_t>(std::round(color.x));
+        uint8_t g = static_cast<uint8_t>(std::round(color.y));
+        uint8_t b = static_cast<uint8_t>(std::round(color.z));
 
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return; // Invalid coordinates
@@ -114,9 +118,9 @@ public:
         int x = position.x;
         int y = position.y;
 
-        Uint8 r = static_cast<u_int8_t>(color.x);
-        Uint8 g = static_cast<u_int8_t>(color.y);
-        Uint8 b = static_cast<u_int8_t>(color.z);
+        uint8_t r = static_cast<uint8_t>(color.x);
+        uint8_t g = static_cast<uint8_t>(color.y);
+        uint8_t b = static_cast<uint8_t>(color.z);
 
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return; // Invalid coordinates
@@ -127,3 +131,5 @@ public:
         pixels[y * (surface->pitch / 4) + x] = pixelColor;
     }
 };
+
+#endif // SCREEN_HPP
