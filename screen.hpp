@@ -97,14 +97,11 @@ public:
         int x2 = static_cast<int>(std::round(std::max(min.x, max.x)));
         int y2 = static_cast<int>(std::round(std::max(min.y, max.y)));
 
-        for (int x = x1; x <= x2; ++x) {
-            setPixel(vec2(static_cast<float>(x), static_cast<float>(y1)), color);
-            setPixel(vec2(static_cast<float>(x), static_cast<float>(y2)), color);
-        }
-
+        // Loop through all pixels within the box and set them to the color
         for (int y = y1; y <= y2; ++y) {
-            setPixel(vec2(static_cast<float>(x1), static_cast<float>(y)), color);
-            setPixel(vec2(static_cast<float>(x2), static_cast<float>(y)), color);
+            for (int x = x1; x <= x2; ++x) {
+                setPixel(vec2(static_cast<float>(x), static_cast<float>(y)), color);
+            }
         }
     }
 
