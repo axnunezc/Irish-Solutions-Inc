@@ -154,3 +154,16 @@ void GUIFile::parseVec3(std::ifstream& file, vec3& vec) {
     vec.z = std::stof(line.substr(line.find('>') + 1));
     std::getline(file, line);
 }
+
+// Getter methods
+std::vector<Line> GUIFile::getLines() const {
+    return lines;
+}
+
+std::vector<Box> GUIFile::getBoxes() const {
+    return boxes;
+}
+
+std::vector<Point> GUIFile::getPoints() const {
+    return points;
+}
