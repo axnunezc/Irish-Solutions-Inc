@@ -81,3 +81,53 @@ void GUIFile::writeFile(const std::string& filename) {
     file << "</layout>\n";
     file.close();
 }
+
+// Read in XML File
+void GUIFile::readFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Failed to open file for reading: " << filename << "\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.find("<line>") != std::string::npos) {
+            Line lineObj;
+            std::getline(file, line);
+            parseVec2(file, lineObj.startPos);
+            std::getline(file, line);
+            std::getline(file, line);
+            parseVec2(file, lineObj.endPos);
+            std::getline(file, line);
+            std::getline(file, line);
+            parseVec3(file, lineObj.color);
+            std::getline(file, line);
+            lines.push_back(lineObj);
+        }
+        else if (line.find("<box>") != std::string::npos) {
+            Box boxObj;
+            std::getline(file, line);
+            parseVec2(file, boxObj.minBounds);
+            std::getline(file, line);
+            std::getline(file, line);
+            parseVec2(file, boxObj.maxBounds);
+            std::getline(file, line);
+            std::getline(file, line);
+            parseVec3(file, boxObj.color);
+            std::getline(file, line);
+            boxes.push_back(boxObj);
+        }
+        else if (line.find("<point>") != std::string::npos) {
+            Point pointObj;
+            std::getline(file, line);
+            parseVec2(file, pointObj.position);
+            std::getline(file, line);
+            std::getline(file, line);
+            parseVec3(file, pointObj.color);
+            std::getline(file, line);
+            points.push_back(pointObj);
+        }
+    }
+    file.close();
+}
