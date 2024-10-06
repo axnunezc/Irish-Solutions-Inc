@@ -1,8 +1,6 @@
 // IrishSolutionsInc.cpp
 #include <iostream>
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "matrix.hpp"
+#include "GUIFile.hpp"
 #include "screen.hpp"
 #include <SDL.h>
 
