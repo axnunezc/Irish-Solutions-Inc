@@ -167,3 +167,10 @@ std::vector<Box> GUIFile::getBoxes() const {
 std::vector<Point> GUIFile::getPoints() const {
     return points;
 }
+
+// Clear data
+void GUIFile::clear() {
+    lines.clear();
+    boxes.clear();
+    points.clear();
+}
