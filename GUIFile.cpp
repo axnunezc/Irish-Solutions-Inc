@@ -131,3 +131,26 @@ void GUIFile::readFile(const std::string& filename) {
     }
     file.close();
 }
+
+void GUIFile::parseVec2(std::ifstream& file, vec2& vec) {
+    std::string line;
+    std::getline(file, line);
+    vec.x = std::stof(line.substr(line.find('>') + 1));
+    std::getline(file, line);
+    std::getline(file, line);
+    vec.y = std::stof(line.substr(line.find('>') + 1));
+    std::getline(file, line);
+}
+
+void GUIFile::parseVec3(std::ifstream& file, vec3& vec) {
+    std::string line;
+    std::getline(file, line);
+    vec.x = std::stof(line.substr(line.find('>') + 1));
+    std::getline(file, line);
+    std::getline(file, line);
+    vec.y = std::stof(line.substr(line.find('>') + 1));
+    std::getline(file, line);
+    std::getline(file, line);
+    vec.z = std::stof(line.substr(line.find('>') + 1));
+    std::getline(file, line);
+}
