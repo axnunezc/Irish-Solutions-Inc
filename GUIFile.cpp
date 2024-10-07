@@ -93,39 +93,34 @@ void GUIFile::readFile(const std::string& filename) {
     std::string line;
     while (std::getline(file, line)) {
         if (line.find("<line>") != std::string::npos) {
+            std::cout << "Line" << "\n";
             Line lineObj;
             std::getline(file, line);
             parseVec2(file, lineObj.startPos);
             std::getline(file, line);
-            std::getline(file, line);
             parseVec2(file, lineObj.endPos);
             std::getline(file, line);
-            std::getline(file, line);
             parseVec3(file, lineObj.color);
-            std::getline(file, line);
             lines.push_back(lineObj);
         }
         else if (line.find("<box>") != std::string::npos) {
+            std::cout << "Box" << "\n";
             Box boxObj;
             std::getline(file, line);
             parseVec2(file, boxObj.minBounds);
             std::getline(file, line);
-            std::getline(file, line);
             parseVec2(file, boxObj.maxBounds);
             std::getline(file, line);
-            std::getline(file, line);
             parseVec3(file, boxObj.color);
-            std::getline(file, line);
             boxes.push_back(boxObj);
         }
         else if (line.find("<point>") != std::string::npos) {
+            std::cout << "Point" << "\n";
             Point pointObj;
             std::getline(file, line);
             parseVec2(file, pointObj.position);
             std::getline(file, line);
-            std::getline(file, line);
             parseVec3(file, pointObj.color);
-            std::getline(file, line);
             points.push_back(pointObj);
         }
     }
@@ -167,7 +162,6 @@ void GUIFile::parseVec2(std::ifstream& file, vec2& vec) {
     }
 
     // Parsing the y value
-    std::getline(file, line);  // Skip the line
     std::getline(file, line);
     if (line.empty()) {
         std::cerr << "Error: Expected <y> tag but got empty line.\n";

@@ -70,17 +70,18 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Draw shapes from the GUIFile
+        // Draw lines from the GUIFile
         for (const auto& line : guiFile.getLines()) {
             screen.drawLine(line.startPos, line.endPos, line.color);
         }
 
+        // Draw boxes from the GUIFile
         for (const auto& box : guiFile.getBoxes()) {
             screen.drawBox(box.minBounds, box.maxBounds, box.color);
         }
 
+        // Draw points from the GUIFile
         for (const auto& point : guiFile.getPoints()) {
-            // Assume a method to draw a point exists
             screen.setPixel(point.position, point.color);
         }
 
