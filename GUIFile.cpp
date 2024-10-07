@@ -132,27 +132,140 @@ void GUIFile::readFile(const std::string& filename) {
     file.close();
 }
 
+// Trim whitespace
+std::string trim(const std::string& str) {
+    const auto begin = str.find_first_not_of(' ');
+    if (begin == std::string::npos) return "";
+    const auto end = str.find_last_not_of(' ');
+    return str.substr(begin, end - begin + 1);
+}
+
 void GUIFile::parseVec2(std::ifstream& file, vec2& vec) {
     std::string line;
+    
+    // Parsing the x value
     std::getline(file, line);
-    vec.x = std::stof(line.substr(line.find('>') + 1));
+    if (line.empty()) {
+        std::cerr << "Error: Expected <x> tag but got empty line.\n";
+        return;
+    }
+    std::size_t xStart = line.find('>') + 1;
+    std::size_t xEnd = line.find("</x>");
+    if (xEnd == std::string::npos) {
+        std::cerr << "Error: Could not find </x> closing tag.\n";
+        return;
+    }
+    std::string xContent = line.substr(xStart, xEnd - xStart);
+    xContent = trim(xContent);
+    std::cout << "Vec2 x content: '" << xContent << "'\n";
+    
+    try {
+        vec.x = std::stof(xContent);  // Convert to float
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting x to float: " << e.what() << "\n";
+        return;
+    }
+
+    // Parsing the y value
+    std::getline(file, line);  // Skip the line
     std::getline(file, line);
-    std::getline(file, line);
-    vec.y = std::stof(line.substr(line.find('>') + 1));
-    std::getline(file, line);
+    if (line.empty()) {
+        std::cerr << "Error: Expected <y> tag but got empty line.\n";
+        return;
+    }
+    std::size_t yStart = line.find('>') + 1;
+    std::size_t yEnd = line.find("</y>");
+    if (yEnd == std::string::npos) {
+        std::cerr << "Error: Could not find </y> closing tag.\n";
+        return;
+    }
+    std::string yContent = line.substr(yStart, yEnd - yStart);
+    yContent = trim(yContent);
+    std::cout << "Vec2 y content: '" << yContent << "'\n";
+    
+    try {
+        vec.y = std::stof(yContent);  // Convert to float
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting y to float: " << e.what() << "\n";
+        return;
+    }
+
+    std::getline(file, line);  // Consume the </vec2> line
 }
 
 void GUIFile::parseVec3(std::ifstream& file, vec3& vec) {
     std::string line;
+    
+    // Parsing the x value
     std::getline(file, line);
-    vec.x = std::stof(line.substr(line.find('>') + 1));
+    if (line.empty()) {
+        std::cerr << "Error: Expected <x> tag but got empty line.\n";
+        return;
+    }
+    std::size_t xStart = line.find('>') + 1;
+    std::size_t xEnd = line.find("</x>");
+    if (xEnd == std::string::npos) {
+        std::cerr << "Error: Could not find </x> closing tag.\n";
+        return;
+    }
+    std::string xContent = line.substr(xStart, xEnd - xStart);
+    xContent = trim(xContent);
+    std::cout << "Vec3 x content: '" << xContent << "'\n";
+
+    try {
+        vec.x = std::stof(xContent);  // Convert to float
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting x to float: " << e.what() << "\n";
+        return;
+    }
+
+    // Parsing the y value
     std::getline(file, line);
+    if (line.empty()) {
+        std::cerr << "Error: Expected <y> tag but got empty line.\n";
+        return;
+    }
+    std::size_t yStart = line.find('>') + 1;
+    std::size_t yEnd = line.find("</y>");
+    if (yEnd == std::string::npos) {
+        std::cerr << "Error: Could not find </y> closing tag.\n";
+        return;
+    }
+    std::string yContent = line.substr(yStart, yEnd - yStart);
+    yContent = trim(yContent);
+    std::cout << "Vec3 y content: '" << yContent << "'\n";
+
+    try {
+        vec.y = std::stof(yContent);  // Convert to float
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting y to float: " << e.what() << "\n";
+        return;
+    }
+
+    // Parsing the z value
     std::getline(file, line);
-    vec.y = std::stof(line.substr(line.find('>') + 1));
-    std::getline(file, line);
-    std::getline(file, line);
-    vec.z = std::stof(line.substr(line.find('>') + 1));
-    std::getline(file, line);
+    if (line.empty()) {
+        std::cerr << "Error: Expected <z> tag but got empty line.\n";
+        return;
+    }
+    std::size_t zStart = line.find('>') + 1;
+    std::size_t zEnd = line.find("</z>");
+    if (zEnd == std::string::npos) {
+        std::cerr << "Error: Could not find </z> closing tag.\n";
+        return;
+    }
+    std::string zContent = line.substr(zStart, zEnd - zStart);
+    zContent = trim(zContent);
+    std::cout << "Vec3 z content: '" << zContent << "'\n";
+
+    try {
+        vec.z = std::stof(zContent);  // Convert to float
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Error converting z to float: " << e.what() << "\n";
+        return;
+    }
+
+    std::getline(file, line);  // Consume the </vec3> line
 }
 
 // Getter methods
