@@ -50,6 +50,9 @@ int main(int argc, char* args[]) {
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+    GUIFile guiFile;
+    guiFile.readFile("shapes.xml");
+
     bool quit = false;
     SDL_Event event;
     while (!quit) {
@@ -67,14 +70,19 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Get center of screen and set colors
-        vec2 center(screen.getWidth() / 2, screen.getHeight() / 2);
-        vec3 lineColor(255, 255, 255); 
-        vec3 boxColor(255, 0, 0); 
+        // Draw shapes from the GUIFile
+        for (const auto& line : guiFile.getLines()) {
+            screen.drawLine(line.startPos, line.endPos, line.color);
+        }
 
-        // Draw Bresenham lines
-        drawBresenhamLines(screen, center, lineColor);
-        drawCenterBox(screen, center, boxColor);
+        for (const auto& box : guiFile.getBoxes()) {
+            screen.drawBox(box.minBounds, box.maxBounds, box.color);
+        }
+
+        for (const auto& point : guiFile.getPoints()) {
+            // Assume a method to draw a point exists
+            screen.setPixel(point.position, point.color);
+        }
 
         // Blit the screen surface to the window surface
         screen.blitTo(screenSurface);
