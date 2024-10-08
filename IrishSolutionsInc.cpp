@@ -50,8 +50,25 @@ int main(int argc, char* args[]) {
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+    // Read in XML file and create line, box, and point elements in GUIFile class
     GUIFile guiFile;
     guiFile.readFile("shapes.xml");
+
+    // Clear line, box, and point vectors
+    guiFile.clear();
+
+    // Creating new elements (line, box, and point)
+    Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 1, 0) }; // Green line
+    Box newBox = { vec2(250, 250), vec2(400, 400), vec3(1, 0, 0) }; // Red box
+    Point newPoint = { vec2(300, 100), vec3(0, 0, 1) };             // Blue point
+
+    // Stage the new elements
+    guiFile.stageLine(newLine);
+    guiFile.stageBox(newBox);
+    guiFile.stagePoint(newPoint);
+
+    // Write new XML file with added elements
+    guiFile.writeFile("shapes2.xml");
 
     bool quit = false;
     SDL_Event event;
