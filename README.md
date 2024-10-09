@@ -5,6 +5,8 @@
 
 The `GUIFile` class is responsible for managing GUI elements like `Line`, `Box`, and `Point`. It provides functionality to stage, store, and write these elements to an XML file format. Additionally, it can read elements from an XML file and reconstruct them within the class. The class uses `std::vector` containers to store the elements.
 
+![GUIFile UML Diagram](GUIFileUML.png)
+
 ## Public Methods
 
 ### stageLine

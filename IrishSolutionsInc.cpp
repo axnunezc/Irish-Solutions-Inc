@@ -54,9 +54,6 @@ int main(int argc, char* args[]) {
     GUIFile guiFile;
     guiFile.readFile("shapes.xml");
 
-    // Clear line, box, and point vectors
-    guiFile.clear();
-
     // Creating new elements (line, box, and point)
     Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 1, 0) }; // Green line
     Box newBox = { vec2(250, 250), vec2(400, 400), vec3(1, 0, 0) }; // Red box
@@ -68,7 +65,7 @@ int main(int argc, char* args[]) {
     guiFile.stagePoint(newPoint);
 
     // Write new XML file with added elements
-    guiFile.writeFile("shapes2.xml");
+    guiFile.writeFile("shapes_out.xml");
 
     bool quit = false;
     SDL_Event event;
