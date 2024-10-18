@@ -97,13 +97,13 @@ public:
 typedef BaseVec2<float> vec2;
 
 template <>
-int BaseVec2<int>::magnitude() const {
+inline int BaseVec2<int>::magnitude() const {
     // Manhattan distance
     return std::abs(x) + std::abs(y);
 }
 
 template <>
-BaseVec2<int> BaseVec2<int>::unit() const {
+inline BaseVec2<int> BaseVec2<int>::unit() const {
     float mag = magnitude();
     if (mag != 0) {
         return BaseVec2(static_cast<int>(std::floor(x / mag)),

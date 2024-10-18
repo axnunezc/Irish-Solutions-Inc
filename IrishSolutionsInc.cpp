@@ -1,8 +1,6 @@
 // IrishSolutionsInc.cpp
 #include <iostream>
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "matrix.hpp"
+#include "GUIFile.hpp"
 #include "screen.hpp"
 #include <SDL.h>
 
@@ -52,6 +50,23 @@ int main(int argc, char* args[]) {
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+    // Read in XML file and create line, box, and point elements in GUIFile class
+    GUIFile guiFile;
+    guiFile.readFile("shapes.xml");
+
+    // Creating new elements (line, box, and point)
+    Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 1, 0) }; // Green line
+    Box newBox = { vec2(250, 250), vec2(400, 400), vec3(1, 0, 0) }; // Red box
+    Point newPoint = { vec2(300, 100), vec3(0, 0, 1) };             // Blue point
+
+    // Stage the new elements
+    guiFile.stageLine(newLine);
+    guiFile.stageBox(newBox);
+    guiFile.stagePoint(newPoint);
+
+    // Write new XML file with added elements
+    guiFile.writeFile("shapes_out.xml");
+
     bool quit = false;
     SDL_Event event;
     while (!quit) {
@@ -69,14 +84,20 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Get center of screen and set colors
-        vec2 center(screen.getWidth() / 2, screen.getHeight() / 2);
-        vec3 lineColor(255, 255, 255); 
-        vec3 boxColor(255, 0, 0); 
+        // Draw lines from the GUIFile
+        for (const auto& line : guiFile.getLines()) {
+            screen.drawLine(line.startPos, line.endPos, line.color);
+        }
 
-        // Draw Bresenham lines
-        drawBresenhamLines(screen, center, lineColor);
-        drawCenterBox(screen, center, boxColor);
+        // Draw boxes from the GUIFile
+        for (const auto& box : guiFile.getBoxes()) {
+            screen.drawBox(box.minBounds, box.maxBounds, box.color);
+        }
+
+        // Draw points from the GUIFile
+        for (const auto& point : guiFile.getPoints()) {
+            screen.setPixel(point.position, point.color);
+        }
 
         // Blit the screen surface to the window surface
         screen.blitTo(screenSurface);
