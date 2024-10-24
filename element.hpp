@@ -87,7 +87,25 @@ public:
     Triangle(vec2 _p1, vec2 _p2, vec2 _p3, vec3 _color)
         : p1(_p1), p2(_p2), p3(_p3), color(_color) {}
 
+    void draw(Screen& screen) override {
+        float minX = std::floor(std::min({ p1.x, p2.x, p3.x }));
+        float maxX = std::ceil(std::max({ p1.x, p2.x, p3.x }));
+        float minY = std::floor(std::min({ p1.y, p2.y, p3.y }));
+        float maxY = std::ceil(std::max({ p1.y, p2.y, p3.y }));
+
+        for (int y = static_cast<int>(minY); y <= static_cast<int>(maxY); ++y) {
+            for (int x = static_cast<int>(minX); x <= static_cast<int>(maxX); ++x) {
+                vec2 pixel(x + 0.5f, y + 0.5f);
+
+                if (inTriangle(pixel, p1, p2, p3)) {
+                    screen.setPixel(pixel, color);
+                }
+            }
+        }
+    }
+
 private:
+    // Barycentric coordinates
     bool inTriangle(const vec2& p, const vec2& a, const vec2& b, const vec2& c) {
         float area = triangleArea(a, b, c);
         float area1 = triangleArea(p, b, c);
