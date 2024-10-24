@@ -7,30 +7,15 @@
 #include <iostream>
 #include "vec2.hpp"
 #include "vec3.hpp"
+#include "element.hpp"
 
 // Line, Box, Point structure definitions
-struct Line {
-    vec2 startPos;
-    vec2 endPos;
-    vec3 color;
-};
-
-struct Box {
-    vec2 minBounds;
-    vec2 maxBounds;
-    vec3 color;
-};
-
-struct Point {
-    vec2 position;
-    vec3 color;
-};
 
 class GUIFile {
     public:
         void stageLine(const Line& line);
         void stageBox(const Box& box);
-        void stagePoint(const Point& point);
+        void stageTriangle(const Triangle& triangle);
 
         void writeFile(const std::string& filename);
         void readFile(const std::string& filename);
@@ -38,13 +23,13 @@ class GUIFile {
         // Getters
         std::vector<Line> getLines() const;
         std::vector<Box> getBoxes() const;
-        std::vector<Point> getPoints() const;
+        std::vector<Triangle> getTriangles() const;
         void clear();
 
     private:
         std::vector<Line> lines;
         std::vector<Box> boxes;
-        std::vector<Point> points;
+        std::vector<Triangle> triangles;
 
         // Helper methods for parsing (not exposed to the public)
         void parseVec2(std::ifstream& file, vec2& vec);

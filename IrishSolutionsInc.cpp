@@ -3,36 +3,10 @@
 #include "GUIFile.hpp"
 #include "screen.hpp"
 #include <SDL.h>
+#include "element.hpp"  // Include element.hpp for Box and Triangle classes
 
 const int SCREEN_WIDTH = 960;  // Initial screen width
 const int SCREEN_HEIGHT = 540; // Initial screen height
-
-void drawBresenhamLines(Screen& screen, vec2 center, vec3 color) {
-    // Get screen corners
-    vec2 topLeft(0, 0);
-    vec2 topRight(screen.getWidth() - 1, 0);
-    vec2 bottomLeft(0, screen.getHeight() - 1);
-    vec2 bottomRight(screen.getWidth() - 1, screen.getHeight() - 1);
-
-    // Draw lines
-    screen.drawLine(center, topLeft, color);
-    screen.drawLine(center, topRight, color);
-    screen.drawLine(center, bottomLeft, color);
-    screen.drawLine(center, bottomRight, color);
-}
-
-void drawCenterBox(Screen& screen, vec2 center, vec3 color) {
-    // Get box dimensions
-    float boxWidth = screen.getWidth() / 3.0f;
-    float boxHeight = screen.getHeight() / 3.0f;
-
-    // Get box corners
-    vec2 topLeft(center.x - boxWidth / 2, center.y - boxHeight / 2);
-    vec2 bottomRight(center.x + boxWidth / 2, center.y + boxHeight / 2);
-
-    // Draw box
-    screen.drawBox(topLeft, bottomRight, color);
-}
 
 int main(int argc, char* args[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -52,17 +26,17 @@ int main(int argc, char* args[]) {
 
     // Read in XML file and create line, box, and point elements in GUIFile class
     GUIFile guiFile;
-    guiFile.readFile("shapes.xml");
+    // guiFile.readFile("shapes.xml");
 
-    // Creating new elements (line, box, and point)
-    Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 1, 0) }; // Green line
-    Box newBox = { vec2(250, 250), vec2(400, 400), vec3(1, 0, 0) }; // Red box
-    Point newPoint = { vec2(300, 100), vec3(0, 0, 1) };             // Blue point
+    // Creating new elements (line, box, triangle, and point)
+    Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 255, 0) }; // Green line
+    Box newBox = { vec2(250, 250), vec2(400, 400), vec3(255, 0, 0) }; // Red box
+    Triangle newTriangle = { vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(0, 0, 255) }; // Blue triangle
 
     // Stage the new elements
     guiFile.stageLine(newLine);
     guiFile.stageBox(newBox);
-    guiFile.stagePoint(newPoint);
+    guiFile.stageTriangle(newTriangle);
 
     // Write new XML file with added elements
     guiFile.writeFile("shapes_out.xml");
@@ -85,18 +59,18 @@ int main(int argc, char* args[]) {
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
         // Draw lines from the GUIFile
-        for (const auto& line : guiFile.getLines()) {
-            screen.drawLine(line.startPos, line.endPos, line.color);
+        for (auto& line : guiFile.getLines()) {
+            line.draw(screen); // Use the draw method of the Line class
         }
 
         // Draw boxes from the GUIFile
-        for (const auto& box : guiFile.getBoxes()) {
-            screen.drawBox(box.minBounds, box.maxBounds, box.color);
+        for (auto& box : guiFile.getBoxes()) {
+            box.draw(screen); // Use the draw method of the Box class
         }
 
-        // Draw points from the GUIFile
-        for (const auto& point : guiFile.getPoints()) {
-            screen.setPixel(point.position, point.color);
+        // Draw triangles from the GUIFile
+        for (auto& triangle : guiFile.getTriangles()) {
+            triangle.draw(screen); // Use the draw method of the Triangle class
         }
 
         // Blit the screen surface to the window surface

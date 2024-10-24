@@ -10,9 +10,9 @@ void GUIFile::stageBox(const Box& box) {
     boxes.push_back(box);
 }
 
-// Stage a point
-void GUIFile::stagePoint(const Point& point) {
-    points.push_back(point);
+// Stage a triangle
+void GUIFile::stageTriangle(const Triangle& triangle) {
+    triangles.push_back(triangle);
 }
 
 // Write an XML file from stored data
@@ -29,12 +29,12 @@ void GUIFile::writeFile(const std::string& filename) {
     for (const auto& line : lines) {
         file << "  <line>\n";
         file << "    <vec2>\n";
-        file << "      <x>" << line.startPos.x << "</x>\n";
-        file << "      <y>" << line.startPos.y << "</y>\n";
+        file << "      <x>" << line.start.x << "</x>\n";
+        file << "      <y>" << line.start.y << "</y>\n";
         file << "    </vec2>\n";
         file << "    <vec2>\n";
-        file << "      <x>" << line.endPos.x << "</x>\n";
-        file << "      <y>" << line.endPos.y << "</y>\n";
+        file << "      <x>" << line.end.x << "</x>\n";
+        file << "      <y>" << line.end.y << "</y>\n";
         file << "    </vec2>\n";
         file << "    <vec3>\n";
         file << "      <x>" << line.color.x << "</x>\n";
@@ -48,12 +48,12 @@ void GUIFile::writeFile(const std::string& filename) {
     for (const auto& box : boxes) {
         file << "  <box>\n";
         file << "    <vec2>\n";
-        file << "      <x>" << box.minBounds.x << "</x>\n";
-        file << "      <y>" << box.minBounds.y << "</y>\n";
+        file << "      <x>" << box.min.x << "</x>\n";
+        file << "      <y>" << box.min.y << "</y>\n";
         file << "    </vec2>\n";
         file << "    <vec2>\n";
-        file << "      <x>" << box.maxBounds.x << "</x>\n";
-        file << "      <y>" << box.maxBounds.y << "</y>\n";
+        file << "      <x>" << box.max.x << "</x>\n";
+        file << "      <y>" << box.max.y << "</y>\n";
         file << "    </vec2>\n";
         file << "    <vec3>\n";
         file << "      <x>" << box.color.x << "</x>\n";
@@ -61,21 +61,6 @@ void GUIFile::writeFile(const std::string& filename) {
         file << "      <z>" << box.color.z << "</z>\n";
         file << "    </vec3>\n";
         file << "  </box>\n";
-    }
-
-    // Writing points
-    for (const auto& point : points) {
-        file << "  <point>\n";
-        file << "    <vec2>\n";
-        file << "      <x>" << point.position.x << "</x>\n";
-        file << "      <y>" << point.position.y << "</y>\n";
-        file << "    </vec2>\n";
-        file << "    <vec3>\n";
-        file << "      <x>" << point.color.x << "</x>\n";
-        file << "      <y>" << point.color.y << "</y>\n";
-        file << "      <z>" << point.color.z << "</z>\n";
-        file << "    </vec3>\n";
-        file << "  </point>\n";
     }
     
     file << "</layout>\n";
@@ -95,25 +80,18 @@ void GUIFile::readFile(const std::string& filename) {
         if (line.find("<line>") != std::string::npos) {
             std::cout << "Line" << "\n";
             Line lineObj;
-            parseVec2(file, lineObj.startPos);
-            parseVec2(file, lineObj.endPos);
+            parseVec2(file, lineObj.start);
+            parseVec2(file, lineObj.end);
             parseVec3(file, lineObj.color);
             lines.push_back(lineObj);
         }
         else if (line.find("<box>") != std::string::npos) {
             std::cout << "Box" << "\n";
             Box boxObj;
-            parseVec2(file, boxObj.minBounds);
-            parseVec2(file, boxObj.maxBounds);
+            parseVec2(file, boxObj.min);
+            parseVec2(file, boxObj.max);
             parseVec3(file, boxObj.color);
             boxes.push_back(boxObj);
-        }
-        else if (line.find("<point>") != std::string::npos) {
-            std::cout << "Point" << "\n";
-            Point pointObj;
-            parseVec2(file, pointObj.position);
-            parseVec3(file, pointObj.color);
-            points.push_back(pointObj);
         }
     }
     file.close();
@@ -304,13 +282,13 @@ std::vector<Box> GUIFile::getBoxes() const {
     return boxes;
 }
 
-std::vector<Point> GUIFile::getPoints() const {
-    return points;
+std::vector<Triangle> GUIFile::getTriangles() const {
+    return triangles;
 }
 
 // Clear data
 void GUIFile::clear() {
     lines.clear();
     boxes.clear();
-    points.clear();
+    triangles.clear();
 }

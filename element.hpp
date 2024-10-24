@@ -15,12 +15,13 @@ public:
 };
 
 class Box : public Element {
-private:
+public:
     vec2 min;
     vec2 max;
     vec3 color;
 
-public:
+    Box() : min(0.0f, 0.0f), max(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
+
     Box(vec2 _min, vec2 _max, vec3 _color)
         : min(_min), max(_max), color(_color) {}
 
@@ -39,12 +40,13 @@ public:
 };
 
 class Line : public Element {
-private:
+public:
     vec2 start;
     vec2 end;
     vec3 color;
 
-public:
+    Line() : start(0.0f, 0.0f), end(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
+
     Line(vec2 _start, vec2 _end, vec3 _color)
         : start(_start), end(_end), color(_color) {}
 
@@ -79,11 +81,12 @@ public:
 };
 
 class Triangle : public Element {
-private:
+public:
     vec2 p1, p2, p3;
     vec3 color;
 
-public:
+    Triangle() : p1(0.0f, 0.0f), p2(0.0f, 0.0f), p3(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
+
     Triangle(vec2 _p1, vec2 _p2, vec2 _p3, vec3 _color)
         : p1(_p1), p2(_p2), p3(_p3), color(_color) {}
 
@@ -114,7 +117,6 @@ private:
         return (area == area1 + area2 + area3);
     }
 
-    // Calculate the area of a triangle given its vertices
     float triangleArea(const vec2& a, const vec2& b, const vec2& c) {
         return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0f);
     }
