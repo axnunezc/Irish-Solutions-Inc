@@ -29,14 +29,14 @@ int main(int argc, char* args[]) {
     // guiFile.readFile("shapes.xml");
 
     // Creating new elements (line, box, triangle, and point)
-    Line newLine = { vec2(50, 50), vec2(200, 200), vec3(0, 255, 0) }; // Green line
-    Box newBox = { vec2(250, 250), vec2(400, 400), vec3(255, 0, 0) }; // Red box
-    Triangle newTriangle = { vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(0, 0, 255) }; // Blue triangle
+    Element* box = new Box(vec2(250, 250), vec2(400, 400), vec3(0, 0, 255)); // Blue box
+    Element* line = new Line(vec2(50, 50), vec2(200, 200), vec3(0, 255, 0)); // Green line
+    Element* triangle = new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 0, 255)); // Purple triangle
 
     // Stage the new elements
-    guiFile.stageLine(newLine);
-    guiFile.stageBox(newBox);
-    guiFile.stageTriangle(newTriangle);
+    guiFile.stageElement(line);
+    guiFile.stageElement(box);
+    guiFile.stageElement(triangle);
 
     // Write new XML file with added elements
     guiFile.writeFile("shapes_out.xml");
@@ -58,19 +58,9 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Draw lines from the GUIFile
-        for (auto& line : guiFile.getLines()) {
-            line.draw(screen); // Use the draw method of the Line class
-        }
-
-        // Draw boxes from the GUIFile
-        for (auto& box : guiFile.getBoxes()) {
-            box.draw(screen); // Use the draw method of the Box class
-        }
-
-        // Draw triangles from the GUIFile
-        for (auto& triangle : guiFile.getTriangles()) {
-            triangle.draw(screen); // Use the draw method of the Triangle class
+        // Draw elements from the GUIFile
+        for (auto& element : guiFile.getElements()) {
+            element->draw(screen); // Use the draw method of the Line class
         }
 
         // Blit the screen surface to the window surface

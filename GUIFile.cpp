@@ -1,18 +1,8 @@
 #include "GUIFile.hpp"
 
 // Stage a line
-void GUIFile::stageLine(const Line& line) {
-    lines.push_back(line);
-}
-
-// Stage a box
-void GUIFile::stageBox(const Box& box) {
-    boxes.push_back(box);
-}
-
-// Stage a triangle
-void GUIFile::stageTriangle(const Triangle& triangle) {
-    triangles.push_back(triangle);
+void GUIFile::stageElement(Element* element) {
+    elements.push_back(element);
 }
 
 // Write an XML file from stored data
@@ -25,43 +15,43 @@ void GUIFile::writeFile(const std::string& filename) {
 
     file << "<layout>\n";
     
-    // Writing lines
-    for (const auto& line : lines) {
-        file << "  <line>\n";
-        file << "    <vec2>\n";
-        file << "      <x>" << line.start.x << "</x>\n";
-        file << "      <y>" << line.start.y << "</y>\n";
-        file << "    </vec2>\n";
-        file << "    <vec2>\n";
-        file << "      <x>" << line.end.x << "</x>\n";
-        file << "      <y>" << line.end.y << "</y>\n";
-        file << "    </vec2>\n";
-        file << "    <vec3>\n";
-        file << "      <x>" << line.color.x << "</x>\n";
-        file << "      <y>" << line.color.y << "</y>\n";
-        file << "      <z>" << line.color.z << "</z>\n";
-        file << "    </vec3>\n";
-        file << "  </line>\n";
-    }
+    // // Writing lines
+    // for (const auto& line : lines) {
+    //     file << "  <line>\n";
+    //     file << "    <vec2>\n";
+    //     file << "      <x>" << line.start.x << "</x>\n";
+    //     file << "      <y>" << line.start.y << "</y>\n";
+    //     file << "    </vec2>\n";
+    //     file << "    <vec2>\n";
+    //     file << "      <x>" << line.end.x << "</x>\n";
+    //     file << "      <y>" << line.end.y << "</y>\n";
+    //     file << "    </vec2>\n";
+    //     file << "    <vec3>\n";
+    //     file << "      <x>" << line.color.x << "</x>\n";
+    //     file << "      <y>" << line.color.y << "</y>\n";
+    //     file << "      <z>" << line.color.z << "</z>\n";
+    //     file << "    </vec3>\n";
+    //     file << "  </line>\n";
+    // }
 
-    // Writing boxes
-    for (const auto& box : boxes) {
-        file << "  <box>\n";
-        file << "    <vec2>\n";
-        file << "      <x>" << box.min.x << "</x>\n";
-        file << "      <y>" << box.min.y << "</y>\n";
-        file << "    </vec2>\n";
-        file << "    <vec2>\n";
-        file << "      <x>" << box.max.x << "</x>\n";
-        file << "      <y>" << box.max.y << "</y>\n";
-        file << "    </vec2>\n";
-        file << "    <vec3>\n";
-        file << "      <x>" << box.color.x << "</x>\n";
-        file << "      <y>" << box.color.y << "</y>\n";
-        file << "      <z>" << box.color.z << "</z>\n";
-        file << "    </vec3>\n";
-        file << "  </box>\n";
-    }
+    // // Writing boxes
+    // for (const auto& box : boxes) {
+    //     file << "  <box>\n";
+    //     file << "    <vec2>\n";
+    //     file << "      <x>" << box.min.x << "</x>\n";
+    //     file << "      <y>" << box.min.y << "</y>\n";
+    //     file << "    </vec2>\n";
+    //     file << "    <vec2>\n";
+    //     file << "      <x>" << box.max.x << "</x>\n";
+    //     file << "      <y>" << box.max.y << "</y>\n";
+    //     file << "    </vec2>\n";
+    //     file << "    <vec3>\n";
+    //     file << "      <x>" << box.color.x << "</x>\n";
+    //     file << "      <y>" << box.color.y << "</y>\n";
+    //     file << "      <z>" << box.color.z << "</z>\n";
+    //     file << "    </vec3>\n";
+    //     file << "  </box>\n";
+    // }
     
     file << "</layout>\n";
     file.close();
@@ -79,19 +69,19 @@ void GUIFile::readFile(const std::string& filename) {
     while (std::getline(file, line)) {
         if (line.find("<line>") != std::string::npos) {
             std::cout << "Line" << "\n";
-            Line lineObj;
-            parseVec2(file, lineObj.start);
-            parseVec2(file, lineObj.end);
-            parseVec3(file, lineObj.color);
-            lines.push_back(lineObj);
+            Line* lineObj = new Line();
+            parseVec2(file, lineObj->start);
+            parseVec2(file, lineObj->end);
+            parseVec3(file, lineObj->color);
+            elements.push_back(lineObj);
         }
         else if (line.find("<box>") != std::string::npos) {
             std::cout << "Box" << "\n";
-            Box boxObj;
-            parseVec2(file, boxObj.min);
-            parseVec2(file, boxObj.max);
-            parseVec3(file, boxObj.color);
-            boxes.push_back(boxObj);
+            Box* boxObj = new Box();
+            parseVec2(file, boxObj->min);
+            parseVec2(file, boxObj->max);
+            parseVec3(file, boxObj->color);
+            elements.push_back(boxObj);
         }
     }
     file.close();
@@ -274,21 +264,11 @@ void GUIFile::parseVec3(std::ifstream& file, vec3& vec) {
 }
 
 // Getter methods
-std::vector<Line> GUIFile::getLines() const {
-    return lines;
-}
-
-std::vector<Box> GUIFile::getBoxes() const {
-    return boxes;
-}
-
-std::vector<Triangle> GUIFile::getTriangles() const {
-    return triangles;
+std::vector<Element*> GUIFile::getElements() const {
+    return elements;
 }
 
 // Clear data
 void GUIFile::clear() {
-    lines.clear();
-    boxes.clear();
-    triangles.clear();
+    elements.clear();
 }
