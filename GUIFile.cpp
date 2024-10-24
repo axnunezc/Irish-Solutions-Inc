@@ -1,10 +1,5 @@
 #include "GUIFile.hpp"
 
-// Stage a line
-void GUIFile::stageElement(Element* element) {
-    elements.push_back(element);
-}
-
 // Write an XML file from stored data
 void GUIFile::writeFile(const std::string& filename) {
     std::ofstream file(filename);
@@ -68,20 +63,18 @@ void GUIFile::readFile(const std::string& filename) {
     std::string line;
     while (std::getline(file, line)) {
         if (line.find("<line>") != std::string::npos) {
-            std::cout << "Line" << "\n";
             Line* lineObj = new Line();
             parseVec2(file, lineObj->start);
             parseVec2(file, lineObj->end);
             parseVec3(file, lineObj->color);
-            elements.push_back(lineObj);
+            elementManager.addElement(lineObj);
         }
         else if (line.find("<box>") != std::string::npos) {
-            std::cout << "Box" << "\n";
             Box* boxObj = new Box();
             parseVec2(file, boxObj->min);
             parseVec2(file, boxObj->max);
             parseVec3(file, boxObj->color);
-            elements.push_back(boxObj);
+            elementManager.addElement(boxObj);
         }
     }
     file.close();
@@ -261,14 +254,4 @@ void GUIFile::parseVec3(std::ifstream& file, vec3& vec) {
             return;
         }
     }
-}
-
-// Getter methods
-std::vector<Element*> GUIFile::getElements() const {
-    return elements;
-}
-
-// Clear data
-void GUIFile::clear() {
-    elements.clear();
 }

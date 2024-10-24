@@ -7,18 +7,13 @@
 
 class ElementManager {
 public:
-    ElementManager() = default;
-    ~ElementManager() {
-        // Clean up active elements
-        for (Element* elem : elements) {
-            delete elem;
-        }
-
-        // Clean up pool
-        for (Element* elem : elementPool) {
-            delete elem;
-        }
+    static ElementManager& getInstance() {
+        static ElementManager instance;  // Guaranteed to be destroyed, instantiated on first use
+        return instance;
     }
+
+    ElementManager(const ElementManager&) = delete;
+    void operator=(const ElementManager&) = delete;
 
     void addElement(Element* element) {
         elements.push_back(element);
@@ -38,6 +33,19 @@ public:
     }
 
 private:
+    ElementManager() = default;
+    ~ElementManager() {
+        // Clean up active elements
+        for (Element* elem : elements) {
+            delete elem;
+        }
+
+        // Clean up pool
+        for (Element* elem : elementPool) {
+            delete elem;
+        }
+    }
+    
     std::vector<Element*> elements;
     std::vector<Element*> elementPool;
 
