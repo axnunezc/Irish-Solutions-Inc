@@ -38,4 +38,15 @@ public:
     }
 };
 
+class Line : public Element {
+private:
+    vec2 start;
+    vec2 end;
+    vec3 color;
+
+public:
+    Line(vec2 _start, vec2 _end, vec3 _color)
+        : start(_start), end(_end), color(_color) {}
+};
+
 #endif // ELEMENT_HPP
