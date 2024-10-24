@@ -78,4 +78,16 @@ public:
     }
 };
 
+class Triangle : public Element {
+private:
+    vec2 p1, p2, p3;
+    vec3 color;
+
+public:
+    Triangle(vec2 _p1, vec2 _p2, vec2 _p3, vec3 _color)
+        : p1(_p1), p2(_p2), p3(_p3), color(_color) {}
+
+private:
+};
+
 #endif // ELEMENT_HPP
