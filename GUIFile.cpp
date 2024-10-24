@@ -9,45 +9,64 @@ void GUIFile::writeFile(const std::string& filename) {
     }
 
     file << "<layout>\n";
-    
-    // // Writing lines
-    // for (const auto& line : lines) {
-    //     file << "  <line>\n";
-    //     file << "    <vec2>\n";
-    //     file << "      <x>" << line.start.x << "</x>\n";
-    //     file << "      <y>" << line.start.y << "</y>\n";
-    //     file << "    </vec2>\n";
-    //     file << "    <vec2>\n";
-    //     file << "      <x>" << line.end.x << "</x>\n";
-    //     file << "      <y>" << line.end.y << "</y>\n";
-    //     file << "    </vec2>\n";
-    //     file << "    <vec3>\n";
-    //     file << "      <x>" << line.color.x << "</x>\n";
-    //     file << "      <y>" << line.color.y << "</y>\n";
-    //     file << "      <z>" << line.color.z << "</z>\n";
-    //     file << "    </vec3>\n";
-    //     file << "  </line>\n";
-    // }
 
-    // // Writing boxes
-    // for (const auto& box : boxes) {
-    //     file << "  <box>\n";
-    //     file << "    <vec2>\n";
-    //     file << "      <x>" << box.min.x << "</x>\n";
-    //     file << "      <y>" << box.min.y << "</y>\n";
-    //     file << "    </vec2>\n";
-    //     file << "    <vec2>\n";
-    //     file << "      <x>" << box.max.x << "</x>\n";
-    //     file << "      <y>" << box.max.y << "</y>\n";
-    //     file << "    </vec2>\n";
-    //     file << "    <vec3>\n";
-    //     file << "      <x>" << box.color.x << "</x>\n";
-    //     file << "      <y>" << box.color.y << "</y>\n";
-    //     file << "      <z>" << box.color.z << "</z>\n";
-    //     file << "    </vec3>\n";
-    //     file << "  </box>\n";
-    // }
-    
+    // Iterate through elements and write based on their type
+    for (const auto& element : elementManager.getElements()) {
+        if (Line* line = dynamic_cast<Line*>(element)) {
+            file << "  <line>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << line->start.x << "</x>\n";
+            file << "      <y>" << line->start.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << line->end.x << "</x>\n";
+            file << "      <y>" << line->end.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec3>\n";
+            file << "      <x>" << line->color.x << "</x>\n";
+            file << "      <y>" << line->color.y << "</y>\n";
+            file << "      <z>" << line->color.z << "</z>\n";
+            file << "    </vec3>\n";
+            file << "  </line>\n";
+        } else if (Box* box = dynamic_cast<Box*>(element)) {
+            file << "  <box>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << box->min.x << "</x>\n";
+            file << "      <y>" << box->min.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << box->max.x << "</x>\n";
+            file << "      <y>" << box->max.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec3>\n";
+            file << "      <x>" << box->color.x << "</x>\n";
+            file << "      <y>" << box->color.y << "</y>\n";
+            file << "      <z>" << box->color.z << "</z>\n";
+            file << "    </vec3>\n";
+            file << "  </box>\n";
+        } else if (Triangle* triangle = dynamic_cast<Triangle*>(element)) {
+            file << "  <triangle>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << triangle->p1.x << "</x>\n";
+            file << "      <y>" << triangle->p1.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << triangle->p2.x << "</x>\n";
+            file << "      <y>" << triangle->p2.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec2>\n";
+            file << "      <x>" << triangle->p3.x << "</x>\n";
+            file << "      <y>" << triangle->p3.y << "</y>\n";
+            file << "    </vec2>\n";
+            file << "    <vec3>\n";
+            file << "      <x>" << triangle->color.x << "</x>\n";
+            file << "      <y>" << triangle->color.y << "</y>\n";
+            file << "      <z>" << triangle->color.z << "</z>\n";
+            file << "    </vec3>\n";
+            file << "  </triangle>\n";
+        }
+    }
+
     file << "</layout>\n";
     file.close();
 }
@@ -75,6 +94,14 @@ void GUIFile::readFile(const std::string& filename) {
             parseVec2(file, boxObj->max);
             parseVec3(file, boxObj->color);
             elementManager.addElement(boxObj);
+        }
+        else if (line.find("<triangle>") != std::string::npos) {
+            Triangle* triangleObj = new Triangle();
+            parseVec2(file, triangleObj->p1);
+            parseVec2(file, triangleObj->p2);
+            parseVec2(file, triangleObj->p3);
+            parseVec3(file, triangleObj->color);
+            elementManager.addElement(triangleObj);
         }
     }
     file.close();

@@ -29,7 +29,7 @@ int main(int argc, char* args[]) {
 
     // Read in XML file and create line, box, and point elements in GUIFile class
     GUIFile guiFile;
-    // guiFile.readFile("shapes.xml");
+    guiFile.readFile("shapes.xml");
 
     // Creating new elements (line, box, triangle, and point)
     Element* box = new Box(vec2(250, 250), vec2(400, 400), vec3(0, 0, 255)); // Blue box
