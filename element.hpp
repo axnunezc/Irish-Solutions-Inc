@@ -47,6 +47,35 @@ private:
 public:
     Line(vec2 _start, vec2 _end, vec3 _color)
         : start(_start), end(_end), color(_color) {}
+
+    void draw(Screen& screen) override {
+        int x0 = static_cast<int>(std::round(start.x));
+        int y0 = static_cast<int>(std::round(start.y));
+        int x1 = static_cast<int>(std::round(end.x));
+        int y1 = static_cast<int>(std::round(end.y));
+
+        int dx = abs(x1 - x0);
+        int dy = abs(y1 - y0);
+        int sx = (x0 < x1) ? 1 : -1;
+        int sy = (y0 < y1) ? 1 : -1;
+        int err = dx - dy;
+
+        while (true) {
+            screen.setPixel(vec2(static_cast<float>(x0), static_cast<float>(y0)), color); // Set pixel
+            
+            if (x0 == x1 && y0 == y1) break; // Exit if we've reached the endpoint
+            
+            int err2 = err * 2;
+            if (err2 > -dy) {
+                err -= dy;
+                x0 += sx;
+            }
+            if (err2 < dx) {
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
 };
 
 #endif // ELEMENT_HPP
