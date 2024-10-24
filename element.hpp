@@ -88,6 +88,18 @@ public:
         : p1(_p1), p2(_p2), p3(_p3), color(_color) {}
 
 private:
+    bool inTriangle(const vec2& p, const vec2& a, const vec2& b, const vec2& c) {
+        float area = triangleArea(a, b, c);
+        float area1 = triangleArea(p, b, c);
+        float area2 = triangleArea(a, p, c);
+        float area3 = triangleArea(a, b, p);
+        return (area == area1 + area2 + area3);
+    }
+
+    // Calculate the area of a triangle given its vertices
+    float triangleArea(const vec2& a, const vec2& b, const vec2& c) {
+        return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0f);
+    }
 };
 
 #endif // ELEMENT_HPP
