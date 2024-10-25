@@ -3,7 +3,10 @@
 #include "GUIFile.hpp"
 #include "screen.hpp"
 #include <SDL.h>
-#include "element.hpp"  // Include element.hpp for Box and Triangle classes
+#include "element.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 const int SCREEN_WIDTH = 960;  // Initial screen width
 const int SCREEN_HEIGHT = 540; // Initial screen height
@@ -35,11 +38,13 @@ int main(int argc, char* args[]) {
     Element* box = new Box(vec2(250, 250), vec2(400, 400), vec3(0, 0, 255)); // Blue box
     Element* line = new Line(vec2(50, 50), vec2(200, 200), vec3(0, 255, 0)); // Green line
     Element* triangle = new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 0, 0)); // Red triangle
+    Element* image = new Image("GUIFileUML.png", vec2(480, 270));
 
     // Stage the new elements
     elementManager.addElement(line);
     elementManager.addElement(box);
     elementManager.addElement(triangle);
+    elementManager.addElement(image);
 
     // Write new XML file with added elements
     guiFile.writeFile("shapes_out.xml");

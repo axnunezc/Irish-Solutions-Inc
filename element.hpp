@@ -6,6 +6,7 @@
 #include "vec2.hpp"
 #include "vec3.hpp"
 #include "screen.hpp"
+#include "stb_image.h"
 
 class Element {
 public:
@@ -120,6 +121,47 @@ private:
     float triangleArea(const vec2& a, const vec2& b, const vec2& c) {
         return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0f);
     }
+};
+
+class Image : public Element {
+public:
+    Image(const std::string& filePath, const vec2& position, float scale = 1.0f, float rotation = 0.0f)
+        : textureSurface(nullptr), position(position), scale(scale), rotation(rotation) {
+        
+        int imgWidth, imgHeight, imgChannels;
+        unsigned char* imgData = stbi_load(filePath.c_str(), &imgWidth, &imgHeight, &imgChannels, 4);
+        if (imgData) {
+            textureSurface = SDL_CreateRGBSurfaceWithFormatFrom(imgData, imgWidth, imgHeight, 32, imgWidth * 4, SDL_PIXELFORMAT_RGBA32);
+            if (!textureSurface) {
+                std::cerr << "Failed to create SDL surface from image data.\n";
+                stbi_image_free(imgData);
+            }
+        } else {
+            std::cerr << "Failed to load image: " << filePath << "\n";
+        }
+    }
+
+    ~Image() {
+        if (textureSurface) {
+            SDL_FreeSurface(textureSurface);
+        }
+    }
+
+    void draw(Screen& screen) override {
+        if (!textureSurface) return;
+
+        SDL_Rect dstRect = { static_cast<int>(position.x), static_cast<int>(position.y), static_cast<int>(textureSurface->w * scale), static_cast<int>(textureSurface->h * scale) };
+        SDL_BlitScaled(textureSurface, nullptr, screen.getSurface(), &dstRect);
+    }
+
+    void setScale(float newScale) { scale = newScale; }
+    void setRotation(float newRotation) { rotation = newRotation; }
+
+private:
+    SDL_Surface* textureSurface;
+    vec2 position;
+    float scale;
+    float rotation;
 };
 
 #endif // ELEMENT_HPP

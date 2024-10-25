@@ -38,6 +38,10 @@ public:
         return height;
     }
 
+    SDL_Surface* getSurface() {
+        return surface;
+    }
+
     // Color a single pixel
     void setPixel(const vec2& pos, const vec3& color) {
         int x = static_cast<int>(std::round(pos.x));
