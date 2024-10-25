@@ -15,53 +15,53 @@ void GUIFile::writeFile(const std::string& filename) {
         if (Line* line = dynamic_cast<Line*>(element)) {
             file << "  <line>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << line->start.x << "</x>\n";
-            file << "      <y>" << line->start.y << "</y>\n";
+            file << "      <x>" << line->getStart().x << "</x>\n";
+            file << "      <y>" << line->getStart().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << line->end.x << "</x>\n";
-            file << "      <y>" << line->end.y << "</y>\n";
+            file << "      <x>" << line->getEnd().x << "</x>\n";
+            file << "      <y>" << line->getEnd().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec3>\n";
-            file << "      <x>" << line->color.x << "</x>\n";
-            file << "      <y>" << line->color.y << "</y>\n";
-            file << "      <z>" << line->color.z << "</z>\n";
+            file << "      <x>" << line->getColor().x << "</x>\n";
+            file << "      <y>" << line->getColor().y << "</y>\n";
+            file << "      <z>" << line->getColor().z << "</z>\n";
             file << "    </vec3>\n";
             file << "  </line>\n";
         } else if (Box* box = dynamic_cast<Box*>(element)) {
             file << "  <box>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << box->min.x << "</x>\n";
-            file << "      <y>" << box->min.y << "</y>\n";
+            file << "      <x>" << box->getMin().x << "</x>\n";
+            file << "      <y>" << box->getMin().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << box->max.x << "</x>\n";
-            file << "      <y>" << box->max.y << "</y>\n";
+            file << "      <x>" << box->getMax().x << "</x>\n";
+            file << "      <y>" << box->getMax().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec3>\n";
-            file << "      <x>" << box->color.x << "</x>\n";
-            file << "      <y>" << box->color.y << "</y>\n";
-            file << "      <z>" << box->color.z << "</z>\n";
+            file << "      <x>" << box->getColor().x << "</x>\n";
+            file << "      <y>" << box->getColor().y << "</y>\n";
+            file << "      <z>" << box->getColor().z << "</z>\n";
             file << "    </vec3>\n";
             file << "  </box>\n";
         } else if (Triangle* triangle = dynamic_cast<Triangle*>(element)) {
             file << "  <triangle>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << triangle->p1.x << "</x>\n";
-            file << "      <y>" << triangle->p1.y << "</y>\n";
+            file << "      <x>" << triangle->getP1().x << "</x>\n";
+            file << "      <y>" << triangle->getP1().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << triangle->p2.x << "</x>\n";
-            file << "      <y>" << triangle->p2.y << "</y>\n";
+            file << "      <x>" << triangle->getP2().x << "</x>\n";
+            file << "      <y>" << triangle->getP2().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec2>\n";
-            file << "      <x>" << triangle->p3.x << "</x>\n";
-            file << "      <y>" << triangle->p3.y << "</y>\n";
+            file << "      <x>" << triangle->getP3().x << "</x>\n";
+            file << "      <y>" << triangle->getP3().y << "</y>\n";
             file << "    </vec2>\n";
             file << "    <vec3>\n";
-            file << "      <x>" << triangle->color.x << "</x>\n";
-            file << "      <y>" << triangle->color.y << "</y>\n";
-            file << "      <z>" << triangle->color.z << "</z>\n";
+            file << "      <x>" << triangle->getColor().x << "</x>\n";
+            file << "      <y>" << triangle->getColor().y << "</y>\n";
+            file << "      <z>" << triangle->getColor().z << "</z>\n";
             file << "    </vec3>\n";
             file << "  </triangle>\n";
         }
@@ -81,26 +81,36 @@ void GUIFile::readFile(const std::string& filename) {
 
     std::string line;
     while (std::getline(file, line)) {
+        vec2 v2 = vec2();
+        vec3 v3 = vec3();
         if (line.find("<line>") != std::string::npos) {
             Line* lineObj = new Line();
-            parseVec2(file, lineObj->start);
-            parseVec2(file, lineObj->end);
-            parseVec3(file, lineObj->color);
+            parseVec2(file, v2);
+            lineObj->setStart(v2);
+            parseVec2(file, v2);
+            lineObj->setEnd(v2);
+            parseVec3(file, v3);
+            lineObj->setColor(v3);
             elementManager.addElement(lineObj);
-        }
-        else if (line.find("<box>") != std::string::npos) {
+        } else if (line.find("<box>") != std::string::npos) {
             Box* boxObj = new Box();
-            parseVec2(file, boxObj->min);
-            parseVec2(file, boxObj->max);
-            parseVec3(file, boxObj->color);
+            parseVec2(file, v2);
+            boxObj->setMin(v2);
+            parseVec2(file, v2);
+            boxObj->setMax(v2);
+            parseVec3(file, v3);
+            boxObj->setColor(v3);
             elementManager.addElement(boxObj);
-        }
-        else if (line.find("<triangle>") != std::string::npos) {
+        } else if (line.find("<triangle>") != std::string::npos) {
             Triangle* triangleObj = new Triangle();
-            parseVec2(file, triangleObj->p1);
-            parseVec2(file, triangleObj->p2);
-            parseVec2(file, triangleObj->p3);
-            parseVec3(file, triangleObj->color);
+            parseVec2(file, v2);
+            triangleObj->setP1(v2);
+            parseVec2(file, v2);
+            triangleObj->setP2(v2);
+            parseVec2(file, v2);
+            triangleObj->setP3(v2);
+            parseVec3(file, v3);
+            triangleObj->setColor(v3);
             elementManager.addElement(triangleObj);
         }
     }

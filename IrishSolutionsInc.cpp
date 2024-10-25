@@ -37,8 +37,8 @@ int main(int argc, char* args[]) {
     // Creating new elements (line, box, triangle, and point)
     Element* box = new Box(vec2(250, 250), vec2(400, 400), vec3(0, 0, 255)); // Blue box
     Element* line = new Line(vec2(50, 50), vec2(200, 200), vec3(0, 255, 0)); // Green line
-    Element* triangle = new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 0, 0)); // Red triangle
-    Element* image = new Image("GUIFileUML.png", vec2(480, 270));
+    Element* triangle = new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 255, 255)); // White triangle
+    Element* image = new Image("GUIFileUML.png", vec2(480, 270), 0.4f); // UML Image
 
     // Stage the new elements
     elementManager.addElement(line);

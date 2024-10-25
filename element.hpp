@@ -17,10 +17,6 @@ public:
 
 class Box : public Element {
 public:
-    vec2 min;
-    vec2 max;
-    vec3 color;
-
     Box() : min(0.0f, 0.0f), max(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
 
     Box(vec2 _min, vec2 _max, vec3 _color)
@@ -38,14 +34,25 @@ public:
             }
         }
     }
+
+    // Getters
+    vec2 getMin() const { return min; }
+    vec2 getMax() const { return max; }
+    vec3 getColor() const { return color; }
+
+    // Setters
+    void setMin(const vec2& _min) { min = _min; }
+    void setMax(const vec2& _max) { max = _max; }
+    void setColor(const vec3& _color) { color = _color; }
+
+private:
+    vec2 min;
+    vec2 max;
+    vec3 color;
 };
 
 class Line : public Element {
 public:
-    vec2 start;
-    vec2 end;
-    vec3 color;
-
     Line() : start(0.0f, 0.0f), end(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
 
     Line(vec2 _start, vec2 _end, vec3 _color)
@@ -79,13 +86,25 @@ public:
             }
         }
     }
+
+    // Getters
+    vec2 getStart() const { return start; }
+    vec2 getEnd() const { return end; }
+    vec3 getColor() const { return color; }
+
+    // Setters
+    void setStart(const vec2& _start) { start = _start; }
+    void setEnd(const vec2& _end) { end = _end; }
+    void setColor(const vec3& _color) { color = _color; }
+
+private:
+    vec2 start;
+    vec2 end;
+    vec3 color;
 };
 
 class Triangle : public Element {
 public:
-    vec2 p1, p2, p3;
-    vec3 color;
-
     Triangle() : p1(0.0f, 0.0f), p2(0.0f, 0.0f), p3(0.0f, 0.0f), color(0.0f, 0.0f, 0.0f) {}
 
     Triangle(vec2 _p1, vec2 _p2, vec2 _p3, vec3 _color)
@@ -108,7 +127,22 @@ public:
         }
     }
 
+    // Getters
+    vec2 getP1() const { return p1; }
+    vec2 getP2() const { return p2; }
+    vec2 getP3() const { return p3; }
+    vec3 getColor() const { return color; }
+
+    // Setters
+    void setP1(const vec2& _p1) { p1 = _p1; }
+    void setP2(const vec2& _p2) { p2 = _p2; }
+    void setP3(const vec2& _p3) { p3 = _p3; }
+    void setColor(const vec3& _color) { color = _color; }
+
 private:
+    vec2 p1, p2, p3;
+    vec3 color;
+
     // Barycentric coordinates
     bool inTriangle(const vec2& p, const vec2& a, const vec2& b, const vec2& c) {
         float area = triangleArea(a, b, c);
@@ -154,6 +188,13 @@ public:
         SDL_BlitScaled(textureSurface, nullptr, screen.getSurface(), &dstRect);
     }
 
+    // Getters
+    vec2 getPosition() const { return position; }
+    float getScale() const { return scale; }
+    float getRotation() const { return rotation; }
+
+    // Setters
+    void setPosition(const vec2& newPosition) { position = newPosition; }
     void setScale(float newScale) { scale = newScale; }
     void setRotation(float newRotation) { rotation = newRotation; }
 
