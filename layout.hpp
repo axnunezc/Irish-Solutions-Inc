@@ -16,7 +16,7 @@ public:
         elements.push_back(element);
     }
 
-    void addNestedLayout(std::shared_ptr<Layout> layout) {
+    void addNestedLayout(Layout* layout) {
         nestedLayouts.push_back(layout);
     }
 
@@ -49,13 +49,16 @@ public:
         }
     }
 
+    ivec2 getStartPosition() const { return startPosition; }
+    ivec2 getEndPosition() const { return endPosition; }
+
 private:
     ivec2 startPosition;
     ivec2 endPosition;
     bool active;
 
     std::vector<Element*> elements;
-    std::vector<std::shared_ptr<Layout>> nestedLayouts;
+    std::vector<Layout*> nestedLayouts;
 };
 
 #endif // LAYOUT_HPP

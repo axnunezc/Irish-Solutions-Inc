@@ -85,7 +85,7 @@ public:
 
     // Clear the screen
     void clear() {
-        SDL_FillRect(vbuffer, NULL, SDL_MapRGB(vbuffer->format, 0x00, 0x00, 0x00));
+        SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
     }
 };
 

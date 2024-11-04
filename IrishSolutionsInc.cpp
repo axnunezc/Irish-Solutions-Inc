@@ -32,22 +32,36 @@ int main(int argc, char* args[]) {
     GUIFile guiFile;
     // guiFile.readFile("shapes.xml");
 
+    // Define Layouts
     Layout layout1;
-    layout1.setActive(false);
-
-    // Add elements to layout1
-    layout1.addElement(new Box(vec2(250, 250), vec2(400, 400), vec3(0, 0, 255))); // Blue box
-    layout1.addElement(new Line(vec2(50, 50), vec2(200, 200), vec3(0, 255, 0))); // Green line
-    layout1.addElement(new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 255, 255))); // White triangle
-    layout1.addElement(new Image("GUIFileUML.png", vec2(480, 270), 0.4f)); // UML Image
+    layout1.setActive(true);
+    layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}); // Left half
 
     Layout layout2;
     layout2.setActive(true);
+    layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}); // Right half
+
+    // Define Nested Layout (layout3) within layout1
+    Layout layout3;
+    layout3.setActive(true);
+    layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
+
+    // Add elements to layout1
+    layout1.addElement(new Box(vec2(50, 50), vec2(200, 200), vec3(0, 0, 255))); // Blue box
+    layout1.addElement(new Line(vec2(50, 250), vec2(200, 250), vec3(0, 255, 0))); // Green line
+    layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
 
     // Add elements to layout2
     layout2.addElement(new Box(vec2(100, 100), vec2(300, 300), vec3(255, 0, 0))); // Red box
     layout2.addElement(new Line(vec2(400, 400), vec2(600, 200), vec3(255, 255, 0))); // Yellow line
     layout2.addElement(new Triangle(vec2(600, 100), vec2(650, 200), vec2(550, 200), vec3(0, 255, 255))); // Cyan triangle
+
+    // Add elements to layout3
+    layout3.addElement(new Box(vec2(20, 20), vec2(120, 120), vec3(128, 0, 128))); // Purple box
+    layout3.addElement(new Line(vec2(30, 130), vec2(130, 130), vec3(128, 128, 0))); // Olive line
+
+    // Nest layout3 within layout1
+    layout1.addNestedLayout(&layout3);
 
     // Write new XML file with added elements
     guiFile.writeFile("shapes_out.xml");
@@ -62,7 +76,11 @@ int main(int argc, char* args[]) {
                 int newWidth = event.window.data1;
                 int newHeight = event.window.data2;
 
+                // Update screen size and layout bounds based on new dimensions
                 screen = Screen(newWidth, newHeight);
+                layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, {0, 0}, {newWidth, newHeight});
+                layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, {0, 0}, {newWidth, newHeight});
+                layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
             }
         }
 
