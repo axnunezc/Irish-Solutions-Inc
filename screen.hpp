@@ -82,6 +82,11 @@ public:
         uint32_t pixelColor = SDL_MapRGB(surface->format, r, g, b);
         pixels[y * (surface->pitch / 4) + x] = pixelColor;
     }
+
+    // Clear the screen
+    void clear() {
+        SDL_FillRect(vbuffer, NULL, SDL_MapRGB(vbuffer->format, 0x00, 0x00, 0x00));
+    }
 };
 
 #endif // SCREEN_HPP
