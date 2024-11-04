@@ -42,6 +42,16 @@ public:
         }
     }
 
+    void setBounds(float sX, float sY, float eX, float eY, const ivec2& parentStart, const ivec2& parentEnd) {
+        ivec2 parentSpace = parentEnd - parentStart;
+        startPosition = parentStart + ivec2(static_cast<int>(sX * parentSpace.x), static_cast<int>(sY * parentSpace.y));
+        endPosition = parentStart + ivec2(static_cast<int>(eX * parentSpace.x), static_cast<int>(eY * parentSpace.y));
+
+        for (const auto& layout : nestedLayouts) {
+            layout->setBounds(sX, sY, eX, eY, startPosition, endPosition);
+        }
+    }
+
 private:
     ivec2 startPosition;
     ivec2 endPosition;
