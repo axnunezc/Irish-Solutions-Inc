@@ -4,6 +4,7 @@
 #include "screen.hpp"
 #include <SDL.h>
 #include "element.hpp"
+#include "layout.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -40,11 +41,15 @@ int main(int argc, char* args[]) {
     Element* triangle = new Triangle(vec2(300, 100), vec2(350, 200), vec2(250, 200), vec3(255, 255, 255)); // White triangle
     Element* image = new Image("GUIFileUML.png", vec2(480, 270), 0.4f); // UML Image
 
-    // Stage the new elements
-    elementManager.addElement(line);
-    elementManager.addElement(box);
-    elementManager.addElement(triangle);
-    elementManager.addElement(image);
+    // Create a root layout and add elements to it
+    Layout rootLayout;
+    rootLayout.setActive(true);
+
+    // Add elements to the layout
+    rootLayout.addElement(line);
+    rootLayout.addElement(box);
+    rootLayout.addElement(triangle);
+    rootLayout.addElement(image);
 
     // Write new XML file with added elements
     guiFile.writeFile("shapes_out.xml");
@@ -66,10 +71,8 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Draw elements from the GUIFile
-        for (auto& element : elementManager.getElements()) {
-            element->draw(screen); // Use the draw method of the Line class
-        }
+        // Render elements from rootLayout
+        rootLayout.render(screen);
 
         // Blit the screen surface to the window surface
         screen.blitTo(screenSurface);

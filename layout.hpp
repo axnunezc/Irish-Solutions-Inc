@@ -12,7 +12,7 @@ public:
     Layout(const ivec2& start = {0, 0}, const ivec2& end = {0, 0}, bool isActive = true)
         : startPosition(start), endPosition(end), active(isActive) {}
 
-    void addElement(std::shared_ptr<Element> element) {
+    void addElement(Element* element) {
         elements.push_back(element);
     }
 
@@ -30,10 +30,7 @@ public:
         ivec2 space = endPosition - startPosition;
 
         for (const auto& element : elements) {
-            ivec2 elementPosition = element->getPosition() + startPosition;
-            element->setPosition(elementPosition);
-            element->draw(screen);
-            element->setPosition(elementPosition - startPosition);  // Reset position
+            element->draw(screen, startPosition);
         }
 
         // Render nested layouts
@@ -57,7 +54,7 @@ private:
     ivec2 endPosition;
     bool active;
 
-    std::vector<std::shared_ptr<Element>> elements;
+    std::vector<Element*> elements;
     std::vector<std::shared_ptr<Layout>> nestedLayouts;
 };
 

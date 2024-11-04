@@ -11,8 +11,14 @@
 class Element {
 public:
     virtual ~Element() = default;
+    virtual void draw(Screen& screen, const ivec2& offset = {0, 0}) = 0;
 
-    virtual void draw(Screen& screen) = 0;
+    // Getter and setter for position
+    vec2 getPosition() const { return position; }
+    void setPosition(const vec2& newPosition) { position = newPosition; }
+
+protected:
+    vec2 position;
 };
 
 class Box : public Element {
@@ -22,11 +28,11 @@ public:
     Box(vec2 _min, vec2 _max, vec3 _color)
         : min(_min), max(_max), color(_color) {}
 
-    void draw(Screen& screen) override {
-        int x1 = static_cast<int>(std::round(std::min(min.x, max.x)));
-        int y1 = static_cast<int>(std::round(std::min(min.y, max.y)));
-        int x2 = static_cast<int>(std::round(std::max(min.x, max.x)));
-        int y2 = static_cast<int>(std::round(std::max(min.y, max.y)));
+    void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
+        int x1 = static_cast<int>(std::round(std::min(min.x, max.x) + offset.x + position.x));
+        int y1 = static_cast<int>(std::round(std::min(min.y, max.y) + offset.y + position.y));
+        int x2 = static_cast<int>(std::round(std::max(min.x, max.x) + offset.x + position.x));
+        int y2 = static_cast<int>(std::round(std::max(min.y, max.y) + offset.y + position.y));
 
         for (int y = y1; y <= y2; ++y) {
             for (int x = x1; x <= x2; ++x) {
@@ -58,11 +64,11 @@ public:
     Line(vec2 _start, vec2 _end, vec3 _color)
         : start(_start), end(_end), color(_color) {}
 
-    void draw(Screen& screen) override {
-        int x0 = static_cast<int>(std::round(start.x));
-        int y0 = static_cast<int>(std::round(start.y));
-        int x1 = static_cast<int>(std::round(end.x));
-        int y1 = static_cast<int>(std::round(end.y));
+    void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
+        int x0 = static_cast<int>(std::round(start.x + offset.x + position.x));
+        int y0 = static_cast<int>(std::round(start.y + offset.y + position.y));
+        int x1 = static_cast<int>(std::round(end.x + offset.x + position.x));
+        int y1 = static_cast<int>(std::round(end.y + offset.y + position.y));
 
         int dx = abs(x1 - x0);
         int dy = abs(y1 - y0);
@@ -71,19 +77,13 @@ public:
         int err = dx - dy;
 
         while (true) {
-            screen.setPixel(vec2(static_cast<float>(x0), static_cast<float>(y0)), color); // Set pixel
-            
-            if (x0 == x1 && y0 == y1) break; // Exit if we've reached the endpoint
-            
+            screen.setPixel(vec2(static_cast<float>(x0), static_cast<float>(y0)), color);
+
+            if (x0 == x1 && y0 == y1) break;
+
             int err2 = err * 2;
-            if (err2 > -dy) {
-                err -= dy;
-                x0 += sx;
-            }
-            if (err2 < dx) {
-                err += dx;
-                y0 += sy;
-            }
+            if (err2 > -dy) { err -= dy; x0 += sx; }
+            if (err2 < dx) { err += dx; y0 += sy; }
         }
     }
 
@@ -110,16 +110,15 @@ public:
     Triangle(vec2 _p1, vec2 _p2, vec2 _p3, vec3 _color)
         : p1(_p1), p2(_p2), p3(_p3), color(_color) {}
 
-    void draw(Screen& screen) override {
-        float minX = std::floor(std::min({ p1.x, p2.x, p3.x }));
-        float maxX = std::ceil(std::max({ p1.x, p2.x, p3.x }));
-        float minY = std::floor(std::min({ p1.y, p2.y, p3.y }));
-        float maxY = std::ceil(std::max({ p1.y, p2.y, p3.y }));
+    void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
+        float minX = std::floor(std::min({ p1.x, p2.x, p3.x }) + offset.x + position.x);
+        float maxX = std::ceil(std::max({ p1.x, p2.x, p3.x }) + offset.x + position.x);
+        float minY = std::floor(std::min({ p1.y, p2.y, p3.y }) + offset.y + position.y);
+        float maxY = std::ceil(std::max({ p1.y, p2.y, p3.y }) + offset.y + position.y);
 
         for (int y = static_cast<int>(minY); y <= static_cast<int>(maxY); ++y) {
             for (int x = static_cast<int>(minX); x <= static_cast<int>(maxX); ++x) {
                 vec2 pixel(x + 0.5f, y + 0.5f);
-
                 if (inTriangle(pixel, p1, p2, p3)) {
                     screen.setPixel(pixel, color);
                 }
@@ -181,11 +180,9 @@ public:
         }
     }
 
-    void draw(Screen& screen) override {
-        if (!textureSurface) return;
-
-        SDL_Rect dstRect = { static_cast<int>(position.x), static_cast<int>(position.y), static_cast<int>(textureSurface->w * scale), static_cast<int>(textureSurface->h * scale) };
-        SDL_BlitScaled(textureSurface, nullptr, screen.getSurface(), &dstRect);
+    void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
+        SDL_Rect dstRect = { static_cast<int>(position.x + offset.x), static_cast<int>(position.y + offset.y), static_cast<int>(textureSurface->w * scale), static_cast<int>(textureSurface->h * scale) };
+        SDL_BlitSurface(textureSurface, nullptr, screen.getSurface(), &dstRect);
     }
 
     // Getters
