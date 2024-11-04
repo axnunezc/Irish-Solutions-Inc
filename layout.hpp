@@ -24,6 +24,24 @@ public:
         active = state;
     }
 
+    void render(Screen& screen) {
+        if (!active) return;
+
+        ivec2 space = endPosition - startPosition;
+
+        for (const auto& element : elements) {
+            ivec2 elementPosition = element->getPosition() + startPosition;
+            element->setPosition(elementPosition);
+            element->draw(screen);
+            element->setPosition(elementPosition - startPosition);  // Reset position
+        }
+
+        // Render nested layouts
+        for (const auto& layout : nestedLayouts) {
+            layout->render(screen);
+        }
+    }
+
 private:
     ivec2 startPosition;
     ivec2 endPosition;
