@@ -1,4 +1,3 @@
-// IrishSolutionsInc.cpp
 #include <iostream>
 #include "GUIFile.hpp"
 #include "screen.hpp"
@@ -28,18 +27,19 @@ int main(int argc, char* args[]) {
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Read in XML file and create line, box, and point elements in GUIFile class
-    GUIFile guiFile;
-    // guiFile.readFile("shapes.xml");
+    // Root layout covering the entire screen
+    Layout rootLayout;
+    rootLayout.setActive(true);
+    rootLayout.setBounds(0.0f, 0.0f, 1.0f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT});
 
-    // Define Layouts
+    // Define Layouts 1 and 2 as sub-regions within rootLayout
     Layout layout1;
     layout1.setActive(true);
-    layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}); // Left half
+    layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition()); // Left half
 
     Layout layout2;
     layout2.setActive(true);
-    layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}); // Right half
+    layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition()); // Right half
 
     // Define Nested Layout (layout3) within layout1
     Layout layout3;
@@ -63,8 +63,13 @@ int main(int argc, char* args[]) {
     // Nest layout3 within layout1
     layout1.addNestedLayout(&layout3);
 
-    // Write new XML file with added elements
-    guiFile.writeFile("shapes_out.xml");
+    // Nest layouts 1 and 2 within the root layout
+    rootLayout.addNestedLayout(&layout1);
+    rootLayout.addNestedLayout(&layout2);
+
+    // Read in XML file
+    GUIFile guiFile;
+    guiFile.readFile("shapes.xml", rootLayout);
 
     bool quit = false;
     SDL_Event event;
@@ -78,8 +83,9 @@ int main(int argc, char* args[]) {
 
                 // Update screen size and layout bounds based on new dimensions
                 screen = Screen(newWidth, newHeight);
-                layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, {0, 0}, {newWidth, newHeight});
-                layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, {0, 0}, {newWidth, newHeight});
+                rootLayout.setBounds(0.0f, 0.0f, 1.0f, 1.0f, {0, 0}, {newWidth, newHeight});
+                layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition());
+                layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition());
                 layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
             }
         }
@@ -87,9 +93,8 @@ int main(int argc, char* args[]) {
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
-        // Render elements from both layouts
-        layout1.render(screen);
-        layout2.render(screen);
+        // Render elements from the root layout, which includes layout1 and layout2
+        rootLayout.render(screen);
 
         // Blit the screen surface to the window surface
         screen.blitTo(screenSurface);

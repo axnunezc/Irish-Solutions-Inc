@@ -24,6 +24,21 @@ public:
         active = state;
     }
 
+    std::vector<Element*> getElements() {
+        std::vector<Element*> allElements;
+
+        // Add the elements from this layout
+        allElements.insert(allElements.end(), elements.begin(), elements.end());
+
+        // Recursively add elements from nested layouts
+        for (const auto& nestedLayout : nestedLayouts) {
+            std::vector<Element*> nestedElements = nestedLayout->getElements();
+            allElements.insert(allElements.end(), nestedElements.begin(), nestedElements.end());
+        }
+
+        return allElements;
+    }
+
     void render(Screen& screen) {
         if (!active) return;
 
