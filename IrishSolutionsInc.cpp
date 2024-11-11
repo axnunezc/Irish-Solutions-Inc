@@ -63,7 +63,7 @@ int main(int argc, char* args[]) {
     // Nest layout3 within layout1
     layout1.addNestedLayout(&layout3);
 
-    // Nest layouts 1 and 2 within the root layout
+    // // Nest layouts 1 and 2 within the root layout
     rootLayout.addNestedLayout(&layout1);
     rootLayout.addNestedLayout(&layout2);
 

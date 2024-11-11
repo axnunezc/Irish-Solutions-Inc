@@ -39,6 +39,25 @@ public:
         return allElements;
     }
 
+    void printLayoutElements() const {
+        std::cout << "Layout elements for Layout at address: " << this << std::endl;
+        std::cout << "Start Position: (" << startPosition.x << ", " << startPosition.y << ")" << std::endl;
+        std::cout << "End Position: (" << endPosition.x << ", " << endPosition.y << ")" << std::endl;
+        std::cout << "Active: " << (active ? "true" : "false") << std::endl;
+
+        std::cout << "Direct elements in this layout:" << std::endl;
+        for (const auto& element : elements) {
+            std::cout << " - Element at address: " << element << std::endl;
+        }
+
+        std::cout << "Nested layouts in this layout:" << std::endl;
+        for (const auto& nestedLayout : nestedLayouts) {
+            std::cout << "**NESTED**" << std::endl;
+            nestedLayout->printLayoutElements();
+        }
+        std::cout << "End of elements for Layout at address: " << this << std::endl;
+    }
+
     void render(Screen& screen) {
         if (!active) return;
 

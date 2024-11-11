@@ -94,12 +94,13 @@ void GUIFile::readFile(const std::string& filename, Layout& layout) {
 // Read in XML File
 void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
     std::string line;
-    Layout layout;
     while (std::getline(file, line)) {
         std::cout << line << std::endl;
+        std::cout << &parentLayout << std::endl;
         vec2 v2 = vec2();
         vec3 v3 = vec3();
         if (line.find("<layout") != std::string::npos) {
+            Layout* layout = new Layout();
             std::vector<std::string> tokens = splitString(line, ' ');
             float sX = 0.0f, sY = 0.0f, eX = 1.0f, eY = 1.0f;
             bool active = false;
@@ -127,10 +128,10 @@ void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
                     active = (activeField == "true");
                 }
             }
-            layout.setBounds(sX, sY, eX, eY, {parentLayout.getStartPosition()}, {parentLayout.getEndPosition()});
-            layout.setActive(active);
-            parentLayout.addNestedLayout(&layout);
-            parseLayout(file, layout);
+            layout->setBounds(sX, sY, eX, eY, {parentLayout.getStartPosition()}, {parentLayout.getEndPosition()});
+            layout->setActive(active);
+            parentLayout.addNestedLayout(layout);
+            parseLayout(file, *layout);
         } else if (line.find("</layout>") != std::string::npos) {
             return;
         } else if (line.find("<line>") != std::string::npos) {
@@ -141,7 +142,7 @@ void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
             lineObj->setEnd(v2);
             parseVec3(file, v3);
             lineObj->setColor(v3);
-            layout.addElement(lineObj);
+            parentLayout.addElement(lineObj);
         } else if (line.find("<box>") != std::string::npos) {
             Box* boxObj = new Box();
             parseVec2(file, v2);
@@ -150,7 +151,7 @@ void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
             boxObj->setMax(v2);
             parseVec3(file, v3);
             boxObj->setColor(v3);
-            layout.addElement(boxObj);
+            parentLayout.addElement(boxObj);
         } else if (line.find("<triangle>") != std::string::npos) {
             Triangle* triangleObj = new Triangle();
             parseVec2(file, v2);
@@ -161,7 +162,7 @@ void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
             triangleObj->setP3(v2);
             parseVec3(file, v3);
             triangleObj->setColor(v3);
-            layout.addElement(triangleObj);
+            parentLayout.addElement(triangleObj);
         }
     }
     file.close();
