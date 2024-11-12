@@ -16,6 +16,17 @@ public:
         if (!instance) instance = new EventManager();
         return instance;
     }
+
+    void queueEvent(std::unique_ptr<Event> event) {
+        eventQueue.push(std::move(event));
+    }
+
+    void processEvents() {
+        while (!eventQueue.empty()) {
+            auto event = std::move(eventQueue.front());
+            eventQueue.pop();
+        }
+    }
 };
 
 #endif // EVENTMANAGER_HPP
