@@ -12,6 +12,15 @@ public:
     Layout(const ivec2& start = {0, 0}, const ivec2& end = {0, 0}, bool isActive = true)
         : startPosition(start), endPosition(end), active(isActive) {}
 
+    ~Layout() {
+    for (auto& element : elements) {
+        delete element;
+    }
+    for (auto& nestedLayout : nestedLayouts) {
+        delete nestedLayout;
+    }
+}
+
     void addElement(Element* element) {
         elements.push_back(element);
     }
