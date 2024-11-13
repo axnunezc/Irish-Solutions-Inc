@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include "element.hpp"
 #include "layout.hpp"
+#include "EventSystem.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -26,6 +27,8 @@ int main(int argc, char* args[]) {
 
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    EventSystem& eventSystem = EventSystem::getInstance();
 
     // Root layout covering the entire screen
     Layout rootLayout;
@@ -50,6 +53,7 @@ int main(int argc, char* args[]) {
     layout1.addElement(new Box(vec2(50, 50), vec2(200, 200), vec3(0, 0, 255))); // Blue box
     layout1.addElement(new Line(vec2(50, 250), vec2(200, 250), vec3(0, 255, 0))); // Green line
     layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
+    layout1.addElement(new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!")); // Black button with text "Click Me!"
 
     // Add elements to layout2
     layout2.addElement(new Box(vec2(100, 100), vec2(300, 300), vec3(255, 0, 0))); // Red box
@@ -67,6 +71,8 @@ int main(int argc, char* args[]) {
     rootLayout.addNestedLayout(&layout1);
     rootLayout.addNestedLayout(&layout2);
 
+    eventSystem.setRootLayout(&rootLayout);
+
     // Read in XML file
     GUIFile guiFile;
     guiFile.readFile("shapes.xml", rootLayout);
@@ -77,6 +83,10 @@ int main(int argc, char* args[]) {
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
                 quit = true;
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    rootLayout.handleClickEvent(event.button.x, event.button.y);
+                }
             } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {
                 int newWidth = event.window.data1;
                 int newHeight = event.window.data2;

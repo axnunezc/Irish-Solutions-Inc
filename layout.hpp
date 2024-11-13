@@ -86,6 +86,19 @@ public:
     ivec2 getStartPosition() const { return startPosition; }
     ivec2 getEndPosition() const { return endPosition; }
 
+    void handleClickEvent(int x, int y) {
+        for (auto& element : elements) {
+            Button* button = dynamic_cast<Button*>(element);
+            if (button) {
+                button->handleClick(x, y);
+            }
+        }
+
+        for (const auto& layout : nestedLayouts) {
+            layout->handleClickEvent(x, y);
+        }
+    }
+
 private:
     ivec2 startPosition;
     ivec2 endPosition;

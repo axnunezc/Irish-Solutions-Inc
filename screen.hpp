@@ -12,6 +12,7 @@ class Screen {
 private:
     unsigned int width, height;
     SDL_Surface* surface;
+    SDL_Renderer* renderer;
 
 public:
     // Class constructor
@@ -41,6 +42,8 @@ public:
     SDL_Surface* getSurface() {
         return surface;
     }
+
+    SDL_Renderer* getRenderer() { return renderer; }
 
     // Color a single pixel
     void setPixel(const vec2& pos, const vec3& color) {

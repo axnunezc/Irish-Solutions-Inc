@@ -7,11 +7,12 @@
 #include "vec3.hpp"
 #include "screen.hpp"
 #include "stb_image.h"
+#include "event.hpp"
 
 class Element {
 public:
     virtual ~Element() = default;
-    virtual void draw(Screen& screen, const ivec2& offset = {0, 0}) = 0;2
+    virtual void draw(Screen& screen, const ivec2& offset = {0, 0}) = 0;
 
     // Getter and setter for position
     vec2 getPosition() const { return position; }
@@ -51,7 +52,7 @@ public:
     void setMax(const vec2& _max) { max = _max; }
     void setColor(const vec3& _color) { color = _color; }
 
-private:
+protected:
     vec2 min;
     vec2 max;
     vec3 color;
@@ -204,56 +205,33 @@ private:
 
 class Button : public Box {
 public:
-    Button(vec2 _min, vec2 _max, vec3 _color, const std::string& _text)
-        : Box(_min, _max, _color), text(_text), backgroundColor(_color), textColor({255, 255, 255, 255}) {}
+    // Constructor that takes position, size, color, and label
+    Button(const vec2& min, const vec2& max, const vec3& color, const std::string& label = "")
+        : Box(min, max, color), label(label) {}
 
-    void setText(const std::string& newText) { text = newText; }
-    void setBackgroundColor(const vec3& color) { backgroundColor = color; }
-    void setTextColor(SDL_Color color) { textColor = color; }
-    void setOnClick(const std::function<void()>& callback) { onClick = callback; }
-
-    void handleClick(int mouseX, int mouseY) {
-        int x1 = static_cast<int>(std::round(min.x + position.x));
-        int y1 = static_cast<int>(std::round(min.y + position.y));
-        int x2 = static_cast<int>(std::round(max.x + position.x));
-        int y2 = static_cast<int>(std::round(max.y + position.y));
-
-        if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
-            if (onClick) {
-                onClick();  // Trigger the callback if the button is clicked
-            }
-        }
-    }
-
+    // Override the draw method to include the button label (if any)
     void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
-        Box::draw(screen, offset);
-
-        if (font && !text.empty()) {
-        SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), textColor);
-        if (textSurface) {
-            SDL_Texture* textTexture = SDL_CreateTextureFromSurface(screen.getRenderer(), textSurface);
-
-            // Calculate position to center the text on the button
-            int textWidth = textSurface->w;
-            int textHeight = textSurface->h;
-            SDL_FreeSurface(textSurface);
-
-            int xCenter = static_cast<int>(std::round((min.x + max.x) / 2 + position.x + offset.x - textWidth / 2));
-            int yCenter = static_cast<int>(std::round((min.y + max.y) / 2 + position.y + offset.y - textHeight / 2));
-
-            SDL_Rect textRect = { xCenter, yCenter, textWidth, textHeight };
-            SDL_RenderCopy(screen.getRenderer(), textTexture, nullptr, &textRect);
-
-            SDL_DestroyTexture(textTexture);
+        Box::draw(screen, offset);  // Draw the button as a Box first
+        
+        // Add label drawing (simple placeholder for text)
+        if (!label.empty()) {
         }
     }
+
+    // Button click handler
+    void handleClick(int x, int y) {
+        // Check if the click is within the bounds of the button
+        if (x >= min.x && x <= max.x && y >= min.y && y <= max.y) {
+            std::cout << "Button at memory address: " << this << " clicked!" << std::endl;
+        }
     }
+
+    // Getters and Setters for the label
+    void setLabel(const std::string& _label) { label = _label; }
+    std::string getLabel() const { return label; }
 
 private:
-    std::string text;
-    vec3 backgroundColor;
-    SDL_Color textColor;
-    std::function<void()> onClick;
+    std::string label;  // Button label (e.g., "Click Me!")
 };
 
 #endif // ELEMENT_HPP
