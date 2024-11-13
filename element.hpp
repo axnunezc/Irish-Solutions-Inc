@@ -11,7 +11,7 @@
 class Element {
 public:
     virtual ~Element() = default;
-    virtual void draw(Screen& screen, const ivec2& offset = {0, 0}) = 0;
+    virtual void draw(Screen& screen, const ivec2& offset = {0, 0}) = 0;2
 
     // Getter and setter for position
     vec2 getPosition() const { return position; }
@@ -200,6 +200,60 @@ private:
     vec2 position;
     float scale;
     float rotation;
+};
+
+class Button : public Box {
+public:
+    Button(vec2 _min, vec2 _max, vec3 _color, const std::string& _text)
+        : Box(_min, _max, _color), text(_text), backgroundColor(_color), textColor({255, 255, 255, 255}) {}
+
+    void setText(const std::string& newText) { text = newText; }
+    void setBackgroundColor(const vec3& color) { backgroundColor = color; }
+    void setTextColor(SDL_Color color) { textColor = color; }
+    void setOnClick(const std::function<void()>& callback) { onClick = callback; }
+
+    void handleClick(int mouseX, int mouseY) {
+        int x1 = static_cast<int>(std::round(min.x + position.x));
+        int y1 = static_cast<int>(std::round(min.y + position.y));
+        int x2 = static_cast<int>(std::round(max.x + position.x));
+        int y2 = static_cast<int>(std::round(max.y + position.y));
+
+        if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+            if (onClick) {
+                onClick();  // Trigger the callback if the button is clicked
+            }
+        }
+    }
+
+    void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
+        Box::draw(screen, offset);
+
+        if (font && !text.empty()) {
+        SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), textColor);
+        if (textSurface) {
+            SDL_Texture* textTexture = SDL_CreateTextureFromSurface(screen.getRenderer(), textSurface);
+
+            // Calculate position to center the text on the button
+            int textWidth = textSurface->w;
+            int textHeight = textSurface->h;
+            SDL_FreeSurface(textSurface);
+
+            int xCenter = static_cast<int>(std::round((min.x + max.x) / 2 + position.x + offset.x - textWidth / 2));
+            int yCenter = static_cast<int>(std::round((min.y + max.y) / 2 + position.y + offset.y - textHeight / 2));
+
+            SDL_Rect textRect = { xCenter, yCenter, textWidth, textHeight };
+            SDL_RenderCopy(screen.getRenderer(), textTexture, nullptr, &textRect);
+
+            SDL_DestroyTexture(textTexture);
+        }
+    }
+    }
+
+private:
+    std::string text;
+    vec3 backgroundColor;
+    SDL_Color textColor;
+    std::function<void()> onClick;
 };
 
 #endif // ELEMENT_HPP
