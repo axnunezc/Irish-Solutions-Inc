@@ -3,6 +3,7 @@
 
 #include "event.hpp"
 #include "layout.hpp"
+#include "SoundPlayer.hpp"
 #include <memory>
 
 class EventSystem {
@@ -42,8 +43,16 @@ public:
         rootLayout = root;
     }
 
+    void setSoundPlayer(SoundPlayer* player) {
+        soundPlayer = player;
+    }
+
     Layout* getRootLayout() const {
         return rootLayout;
+    }
+
+    SoundPlayer* getSoundPlayer() const {
+        return soundPlayer;
     }
 
 private:
@@ -56,7 +65,7 @@ private:
     }
 
     void handleSoundEvent(SoundEvent* event) {
-        // Handle sound event logic
+        soundPlayer->playSound();
     }
 
     Layout* findLayout(const std::string& layoutName, Layout* layout) {
@@ -77,6 +86,7 @@ private:
     EventSystem() {}
     std::vector<Event*> events;
     Layout* rootLayout;
+    SoundPlayer* soundPlayer;
 };
 
 #endif  // EVENTSYSTEM_HPP

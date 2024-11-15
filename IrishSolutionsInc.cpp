@@ -5,6 +5,7 @@
 #include "element.hpp"
 #include "layout.hpp"
 #include "EventSystem.hpp"
+#include "SoundPlayer.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -54,9 +55,6 @@ int main(int argc, char* args[]) {
     layout1.addElement(new Line(vec2(50, 250), vec2(200, 250), vec3(0, 255, 0))); // Green line
     layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
     Button* button = new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!");
-    button->setOnClick([]() {
-        EventSystem::getInstance().addEvent(new ShowEvent("NestedLayout"));
-    });
     layout1.addElement(button);
 
     // Add elements to layout2
@@ -76,6 +74,17 @@ int main(int argc, char* args[]) {
     rootLayout.addNestedLayout(&layout2);
 
     eventSystem.setRootLayout(&rootLayout);
+
+    // Create a SoundPlayer instance
+    SoundPlayer soundPlayer;
+
+    // Load a sound file
+    if (!soundPlayer.loadSound("piano.wav")) {
+        std::cerr << "Failed to load sound!" << std::endl;
+        return 1;
+    }
+
+    eventSystem.setSoundPlayer(&soundPlayer);
 
     // Read in XML file
     GUIFile guiFile;
