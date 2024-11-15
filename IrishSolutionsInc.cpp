@@ -55,7 +55,7 @@ int main(int argc, char* args[]) {
     layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
     Button* button = new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!");
     button->setOnClick([]() {
-        EventSystem::getInstance().toggleLayout("RightLayout");
+        EventSystem::getInstance().addEvent(new ShowEvent("NestedLayout"));
     });
     layout1.addElement(button);
 
@@ -89,7 +89,9 @@ int main(int argc, char* args[]) {
                 quit = true;
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
-                    rootLayout.handleClickEvent(event.button.x, event.button.y);
+                    EventSystem::getInstance().addEvent(new ClickEvent(event.button.x, event.button.y));
+                    EventSystem::getInstance().addEvent(new ShowEvent("NestedLayout"));
+                    EventSystem::getInstance().addEvent(new SoundEvent());
                 }
             } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {
                 int newWidth = event.window.data1;
@@ -103,6 +105,9 @@ int main(int argc, char* args[]) {
                 layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
             }
         }
+
+        // Process all accumulated events
+        EventSystem::getInstance().processEvents();
 
         // Set screen color to gray
         SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));

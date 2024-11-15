@@ -72,7 +72,6 @@ public:
     }
 
     void render(Screen& screen) {
-        std::cout << this->name << std::endl;
         if (!active) {
             return;
         };
@@ -112,6 +111,16 @@ public:
 
         for (const auto& layout : nestedLayouts) {
             layout->handleClickEvent(x, y);
+        }
+    }
+
+    void handleShowEvent(const std::string& layoutName) {
+        if (name == layoutName) {
+            active = !active;
+        } else {
+            for (const auto& nestedLayout : nestedLayouts) {
+                nestedLayout->handleShowEvent(layoutName);
+            }
         }
     }
 

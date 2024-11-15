@@ -12,11 +12,27 @@ public:
         return instance;
     }
 
+    void addEvent(Event* event) {
+        events.push_back(event);
+    }
+
+    void processEvents() {
+        for (auto& event : events) {
+            if (event->getType() == EventType::CLICK) {
+                handleClickEvent(dynamic_cast<ClickEvent*>(event));
+            } else if (event->getType() == EventType::SHOW) {
+                handleShowEvent(dynamic_cast<ShowEvent*>(event));
+            } else if (event->getType() == EventType::SOUND) {
+                handleSoundEvent(dynamic_cast<SoundEvent*>(event));
+            }
+        }
+        events.clear();
+    }
+
     void toggleLayout(const std::string& layoutName) {
         if (rootLayout) {
             Layout* targetLayout = findLayout(layoutName, rootLayout);
             if (targetLayout) {
-                std::cout << targetLayout->getActive() << std::endl;
                 targetLayout->setActive(!(targetLayout->getActive()));
             }
         }
@@ -26,8 +42,22 @@ public:
         rootLayout = root;
     }
 
+    Layout* getRootLayout() const {
+        return rootLayout;
+    }
+
 private:
-    Layout* rootLayout = nullptr;  // Root layout of the system
+    void handleClickEvent(ClickEvent* event) {
+        rootLayout->handleClickEvent(event->getX(), event->getY());
+    }
+
+    void handleShowEvent(ShowEvent* event) {
+        rootLayout->handleShowEvent(event->getLayoutName());
+    }
+
+    void handleSoundEvent(SoundEvent* event) {
+        // Handle sound event logic
+    }
 
     Layout* findLayout(const std::string& layoutName, Layout* layout) {
         if (layout->getName() == layoutName) {
@@ -44,7 +74,9 @@ private:
         return nullptr;
     }
 
-    EventSystem() {}  // Private constructor for singleton
+    EventSystem() {}
+    std::vector<Event*> events;
+    Layout* rootLayout;
 };
 
 #endif  // EVENTSYSTEM_HPP
