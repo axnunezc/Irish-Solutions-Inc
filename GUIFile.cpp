@@ -95,8 +95,6 @@ void GUIFile::readFile(const std::string& filename, Layout& layout) {
 void GUIFile::parseLayout(std::ifstream& file, Layout& parentLayout) {
     std::string line;
     while (std::getline(file, line)) {
-        std::cout << line << std::endl;
-        std::cout << &parentLayout << std::endl;
         vec2 v2 = vec2();
         vec3 v3 = vec3();
         if (line.find("<layout") != std::string::npos) {

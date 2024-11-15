@@ -31,21 +31,21 @@ int main(int argc, char* args[]) {
     EventSystem& eventSystem = EventSystem::getInstance();
 
     // Root layout covering the entire screen
-    Layout rootLayout;
+    Layout rootLayout("RootLayout");
     rootLayout.setActive(true);
     rootLayout.setBounds(0.0f, 0.0f, 1.0f, 1.0f, {0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT});
 
     // Define Layouts 1 and 2 as sub-regions within rootLayout
-    Layout layout1;
+    Layout layout1("LeftLayout");
     layout1.setActive(true);
     layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition()); // Left half
 
-    Layout layout2;
+    Layout layout2("RightLayout");
     layout2.setActive(true);
     layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition()); // Right half
 
     // Define Nested Layout (layout3) within layout1
-    Layout layout3;
+    Layout layout3("NestedLayout");
     layout3.setActive(true);
     layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
 
@@ -53,7 +53,11 @@ int main(int argc, char* args[]) {
     layout1.addElement(new Box(vec2(50, 50), vec2(200, 200), vec3(0, 0, 255))); // Blue box
     layout1.addElement(new Line(vec2(50, 250), vec2(200, 250), vec3(0, 255, 0))); // Green line
     layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
-    layout1.addElement(new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!")); // Black button with text "Click Me!"
+    Button* button = new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!");
+    button->setOnClick([]() {
+        EventSystem::getInstance().toggleLayout("RightLayout");
+    });
+    layout1.addElement(button);
 
     // Add elements to layout2
     layout2.addElement(new Box(vec2(100, 100), vec2(300, 300), vec3(255, 0, 0))); // Red box

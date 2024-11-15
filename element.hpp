@@ -218,13 +218,20 @@ public:
         }
     }
 
+    using ClickCallback = std::function<void()>;
+
     // Button click handler
     void handleClick(int x, int y) {
         // Check if the click is within the bounds of the button
         if (x >= min.x && x <= max.x && y >= min.y && y <= max.y) {
             std::cout << "Button at memory address: " << this << " clicked!" << std::endl;
+            if (onClick) {
+                onClick();
+            }
         }
     }
+
+    void setOnClick(ClickCallback callback) { onClick = callback; }
 
     // Getters and Setters for the label
     void setLabel(const std::string& _label) { label = _label; }
@@ -232,6 +239,7 @@ public:
 
 private:
     std::string label;  // Button label (e.g., "Click Me!")
+    ClickCallback onClick;
 };
 
 #endif // ELEMENT_HPP

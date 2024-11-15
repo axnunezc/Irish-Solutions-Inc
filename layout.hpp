@@ -9,8 +9,17 @@
 
 class Layout {
 public:
-    Layout(const ivec2& start = {0, 0}, const ivec2& end = {0, 0}, bool isActive = true)
-        : startPosition(start), endPosition(end), active(isActive) {}
+    // Default constructor
+    Layout() : startPosition({0, 0}), endPosition({0, 0}), active(true), name("") {}
+
+    // Constructor with full parameters
+    Layout(const ivec2& start, const ivec2& end, bool isActive, const std::string& layoutName = "")
+        : startPosition(start), endPosition(end), active(isActive), name(layoutName) {}
+
+    // Constructor for name-only layouts
+    Layout(const std::string& layoutName) : name(layoutName) {}
+
+    std::string getName() const { return name; }
 
     void addElement(Element* element) {
         elements.push_back(element);
@@ -23,6 +32,10 @@ public:
     void setActive(bool state) {
         active = state;
     }
+
+    std::vector<Layout*> getNestedLayouts() const { return nestedLayouts; }
+
+    bool getActive() const { return active; }
 
     std::vector<Element*> getElements() {
         std::vector<Element*> allElements;
@@ -59,7 +72,10 @@ public:
     }
 
     void render(Screen& screen) {
-        if (!active) return;
+        std::cout << this->name << std::endl;
+        if (!active) {
+            return;
+        };
 
         ivec2 space = endPosition - startPosition;
 
@@ -103,6 +119,7 @@ private:
     ivec2 startPosition;
     ivec2 endPosition;
     bool active;
+    std::string name;
 
     std::vector<Element*> elements;
     std::vector<Layout*> nestedLayouts;
