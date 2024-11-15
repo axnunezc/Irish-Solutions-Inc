@@ -1,0 +1,89 @@
+<layout sX=0.0 sY=0.0 eX=1.0 eY=1.0 active=true>
+    <line>
+        <vec2>
+            <x>50.5</x>
+            <y>92.47</y>
+        </vec2>
+        <vec2>
+            <x>175.6</x>
+            <y>201.6</y>
+        </vec2>
+        <vec3>
+            <x>244.0</x>
+            <y>245.0</y>
+            <z>103.3</z>
+        </vec3>
+    </line>
+    
+    <box>
+        <vec2>
+            <x>250.3</x>
+            <y>122.5</y>
+        </vec2>
+        <vec2>
+            <x>420.34</x>
+            <y>254.9</y>
+        </vec2>
+        <ivec3>
+            <x>212</x>
+            <y>22</y>
+            <z>124</z>
+        </ivec3>
+    </box>
+
+    <layout sX=0.3 sY=0.3 eX=0.7 eY=0.7 active=false>
+        <line>
+        <vec2>
+            <x>30.5</x>
+            <y>192.47</y>
+        </vec2>
+        <vec2>
+            <x>275.6</x>
+            <y>201.6</y>
+        </vec2>
+        <vec3>
+            <x>244.0</x>
+            <y>245.0</y>
+            <z>203.3</z>
+        </vec3>
+    </line>
+    
+    <box>
+        <vec2>
+            <x>550.3</x>
+            <y>422.5</y>
+        </vec2>
+        <vec2>
+            <x>720.34</x>
+            <y>554.9</y>
+        </vec2>
+        <ivec3>
+            <x>212</x>
+            <y>22</y>
+            <z>124</z>
+        </ivec3>
+    </box>
+    </layout>
+
+    <layout sX=0.5 sY=0.5 eX=1.0 eY=1.0 active=true>
+        <triangle>
+        <ivec2>
+            <x>480</x>
+            <y>400</y>
+        </ivec2>
+        <ivec2>
+            <x>380</x>
+            <y>150</y>
+        </ivec2>
+        <ivec2>
+            <x>800</x>
+            <y>386</y>
+        </ivec2>
+        <ivec3>
+            <x>0</x>
+            <y>0</y>
+            <z>0</z>
+        </ivec3>
+    </triangle>
+    </layout>
+</layout>

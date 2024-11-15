@@ -12,6 +12,7 @@ class Screen {
 private:
     unsigned int width, height;
     SDL_Surface* surface;
+    SDL_Renderer* renderer;
 
 public:
     // Class constructor
@@ -38,6 +39,12 @@ public:
         return height;
     }
 
+    SDL_Surface* getSurface() {
+        return surface;
+    }
+
+    SDL_Renderer* getRenderer() { return renderer; }
+
     // Color a single pixel
     void setPixel(const vec2& pos, const vec3& color) {
         int x = static_cast<int>(std::round(pos.x));
@@ -54,55 +61,6 @@ public:
         uint32_t* pixels = (uint32_t*)surface->pixels;
         uint32_t pixelColor = SDL_MapRGB(surface->format, r, g, b);
         pixels[y * (surface->pitch / 4) + x] = pixelColor;
-    }
-
-    // Line Drawing
-    void drawLine(vec2 start, vec2 end, vec3 color) {
-        if (start.x > end.x || (start.x == end.x && start.y > end.y)) {
-            std::swap(start, end);
-        }
-
-        int x1 = static_cast<int>(std::round(start.x));
-        int y1 = static_cast<int>(std::round(start.y));
-        int x2 = static_cast<int>(std::round(end.x));
-        int y2 = static_cast<int>(std::round(end.y));
-
-        int dx = std::abs(x2 - x1);
-        int dy = std::abs(y2 - y1);
-        int sx = (x1 < x2) ? 1 : -1;
-        int sy = (y1 < y2) ? 1 : -1;
-        int err = dx - dy;
-
-        while (true) {
-            setPixel(vec2(static_cast<float>(x1), static_cast<float>(y1)), color);
-
-            if (x1 == x2 && y1 == y2) break;
-            int e2 = err * 2;
-            if (e2 > -dy) {
-                err -= dy;
-                x1 += sx;
-            }
-            if (e2 < dx) {
-                err += dx;
-                y1 += sy;
-            }
-        }
-    }
-
-    // Box Drawing
-    void drawBox(vec2 min, vec2 max, vec3 color) {
-        // Make sure min and max are accurate
-        int x1 = static_cast<int>(std::round(std::min(min.x, max.x)));
-        int y1 = static_cast<int>(std::round(std::min(min.y, max.y)));
-        int x2 = static_cast<int>(std::round(std::max(min.x, max.x)));
-        int y2 = static_cast<int>(std::round(std::max(min.y, max.y)));
-
-        // Loop through all pixels within the box and set them to the color
-        for (int y = y1; y <= y2; ++y) {
-            for (int x = x1; x <= x2; ++x) {
-                setPixel(vec2(static_cast<float>(x), static_cast<float>(y)), color);
-            }
-        }
     }
 
     // Blit to other surface
@@ -126,6 +84,11 @@ public:
         uint32_t* pixels = (uint32_t*)surface->pixels;
         uint32_t pixelColor = SDL_MapRGB(surface->format, r, g, b);
         pixels[y * (surface->pitch / 4) + x] = pixelColor;
+    }
+
+    // Clear the screen
+    void clear() {
+        SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
     }
 };
 
