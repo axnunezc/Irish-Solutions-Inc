@@ -7,6 +7,7 @@
 #include "vec3.hpp"
 #include "screen.hpp"
 #include "stb_image.h"
+#include <algorithm>
 
 class Element {
 public:
