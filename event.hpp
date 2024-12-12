@@ -21,17 +21,23 @@ public:
 };
 
 class ShowEvent : public Event {
+    int x, y;
     std::string layoutName;
 public:
-    ShowEvent(const std::string &name) : layoutName(name) {}
+    ShowEvent(int xCoord, int yCoord, const std::string &name) : x(xCoord), y(yCoord), layoutName(name) {}
     EventType getType() const override { return EventType::SHOW; }
+    int getX() const { return x; }
+    int getY() const { return y; }
     const std::string& getLayoutName() const { return layoutName; }
 };
 
 class SoundEvent : public Event {
+    int x, y;
 public:
-    SoundEvent() {}
+    SoundEvent(int xCoord, int yCoord) : x(xCoord), y(yCoord) {}
     EventType getType() const override { return EventType::SOUND; }
+    int getX() const { return x; }
+    int getY() const { return y; }
 };
 
 #endif // EVENT_HPP

@@ -8,6 +8,9 @@
 #include "screen.hpp"
 #include "stb_image.h"
 #include "event.hpp"
+#include <algorithm>
+#include <random>
+#include <cstdlib>
 
 class Element {
 public:
@@ -17,6 +20,8 @@ public:
     // Getter and setter for position
     vec2 getPosition() const { return position; }
     void setPosition(const vec2& newPosition) { position = newPosition; }
+
+    virtual int getType() const = 0;
 
 protected:
     vec2 position;
@@ -51,6 +56,20 @@ public:
     void setMin(const vec2& _min) { min = _min; }
     void setMax(const vec2& _max) { max = _max; }
     void setColor(const vec3& _color) { color = _color; }
+
+    int getType() const override {
+        return 1;
+    }
+
+    bool containsPoint(const vec2& point) const {
+        float minX = std::min(min.x, max.x) + position.x;
+        float maxX = std::max(min.x, max.x) + position.x;
+        float minY = std::min(min.y, max.y) + position.y;
+        float maxY = std::max(min.y, max.y) + position.y;
+
+        return (point.x >= minX && point.x <= maxX &&
+                point.y >= minY && point.y <= maxY);
+    }
 
 protected:
     vec2 min;
@@ -98,6 +117,10 @@ public:
     void setEnd(const vec2& _end) { end = _end; }
     void setColor(const vec3& _color) { color = _color; }
 
+    int getType() const override {
+        return 3;
+    }
+
 private:
     vec2 start;
     vec2 end;
@@ -139,12 +162,24 @@ public:
     void setP3(const vec2& _p3) { p3 = _p3; }
     void setColor(const vec3& _color) { color = _color; }
 
+    int getType() const override {
+        return 2;
+    }
+
+    bool containsPoint(const vec2& point) const {
+        vec2 transformedP1 = p1 + position;
+        vec2 transformedP2 = p2 + position;
+        vec2 transformedP3 = p3 + position;
+
+        return inTriangle(point, transformedP1, transformedP2, transformedP3);
+    }
+
 private:
     vec2 p1, p2, p3;
     vec3 color;
 
     // Barycentric coordinates
-    bool inTriangle(const vec2& p, const vec2& a, const vec2& b, const vec2& c) {
+    bool inTriangle(const vec2& p, const vec2& a, const vec2& b, const vec2& c) const {
         float area = triangleArea(a, b, c);
         float area1 = triangleArea(p, b, c);
         float area2 = triangleArea(a, p, c);
@@ -152,20 +187,22 @@ private:
         return (area == area1 + area2 + area3);
     }
 
-    float triangleArea(const vec2& a, const vec2& b, const vec2& c) {
+    float triangleArea(const vec2& a, const vec2& b, const vec2& c) const {
         return std::abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0f);
     }
 };
 
 class Image : public Element {
 public:
-    Image(const std::string& filePath, const vec2& position, float scale = 1.0f, float rotation = 0.0f)
-        : textureSurface(nullptr), position(position), scale(scale), rotation(rotation) {
-        
+    Image() : min(0.0f, 0.0f), max(0.0f, 0.0f), rotation(0.0f) {}
+
+    Image(const std::string& filePath, vec2 _min, vec2 _max)
+        : min(_min), max(_max), rotation(0.0f) {
         int imgWidth, imgHeight, imgChannels;
         unsigned char* imgData = stbi_load(filePath.c_str(), &imgWidth, &imgHeight, &imgChannels, 4);
         if (imgData) {
-            textureSurface = SDL_CreateRGBSurfaceWithFormatFrom(imgData, imgWidth, imgHeight, 32, imgWidth * 4, SDL_PIXELFORMAT_RGBA32);
+            textureSurface = SDL_CreateRGBSurfaceWithFormatFrom(
+                imgData, imgWidth, imgHeight, 32, imgWidth * 4, SDL_PIXELFORMAT_RGBA32);
             if (!textureSurface) {
                 std::cerr << "Failed to create SDL surface from image data.\n";
                 stbi_image_free(imgData);
@@ -182,24 +219,61 @@ public:
     }
 
     void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
-        SDL_Rect dstRect = { static_cast<int>(position.x + offset.x), static_cast<int>(position.y + offset.y), static_cast<int>(textureSurface->w * scale), static_cast<int>(textureSurface->h * scale) };
-        SDL_BlitSurface(textureSurface, nullptr, screen.getSurface(), &dstRect);
+        int x1 = static_cast<int>(std::round(std::min(min.x, max.x) + offset.x));
+        int y1 = static_cast<int>(std::round(std::min(min.y, max.y) + offset.y));
+        int x2 = static_cast<int>(std::round(std::max(min.x, max.x) + offset.x));
+        int y2 = static_cast<int>(std::round(std::max(min.y, max.y) + offset.y));
+
+        SDL_Rect dstRect = { x1, y1, x2 - x1, y2 - y1 };
+        SDL_BlitScaled(textureSurface, nullptr, screen.getSurface(), &dstRect);
+    }
+
+    int getType() const override {
+        return 4;
+    }
+
+    void rotate90Degrees() {
+        if (!textureSurface) return;
+
+        // Create a new surface for the rotated image
+        SDL_Surface* rotatedSurface = SDL_CreateRGBSurfaceWithFormat(
+            0, textureSurface->h, textureSurface->w, 32, textureSurface->format->format);
+        if (!rotatedSurface) {
+            std::cerr << "Failed to create rotated surface.\n";
+            return;
+        }
+
+        // Rotate pixels 90 degrees
+        for (int y = 0; y < textureSurface->h; ++y) {
+            for (int x = 0; x < textureSurface->w; ++x) {
+                Uint32 pixel = ((Uint32*)textureSurface->pixels)[y * textureSurface->w + x];
+                int newX = textureSurface->h - y - 1; // New X coordinate
+                int newY = x;                        // New Y coordinate
+                ((Uint32*)rotatedSurface->pixels)[newY * rotatedSurface->w + newX] = pixel;
+            }
+        }
+
+        // Replace the original surface with the rotated surface
+        SDL_FreeSurface(textureSurface);
+        textureSurface = rotatedSurface;
+
+        return;
     }
 
     // Getters
-    vec2 getPosition() const { return position; }
-    float getScale() const { return scale; }
+    vec2 getMin() const { return min; }
+    vec2 getMax() const { return max; }
     float getRotation() const { return rotation; }
 
     // Setters
-    void setPosition(const vec2& newPosition) { position = newPosition; }
-    void setScale(float newScale) { scale = newScale; }
-    void setRotation(float newRotation) { rotation = newRotation; }
+    void setMin(const vec2& _min) { min = _min; }
+    void setMax(const vec2& _max) { max = _max; }
+    void setRotation(float _rotation) { rotation = _rotation; }
 
 private:
-    SDL_Surface* textureSurface;
-    vec2 position;
-    float scale;
+    SDL_Surface* textureSurface = nullptr;
+    vec2 min;
+    vec2 max;
     float rotation;
 };
 
@@ -207,7 +281,7 @@ class Button : public Box {
 public:
     // Constructor that takes position, size, color, and label
     Button(const vec2& min, const vec2& max, const vec3& color, const std::string& label = "")
-        : Box(min, max, color), label(label) {}
+        : Box(min, max, color), label(label), id("") {}
 
     // Override the draw method to include the button label (if any)
     void draw(Screen& screen, const ivec2& offset = {0, 0}) override {
@@ -218,17 +292,27 @@ public:
         }
     }
 
+    void setId(const std::string& buttonId) { id = buttonId; }
+    std::string getId() const { return id; }
+
     using ClickCallback = std::function<void()>;
 
     // Button click handler
-    void handleClick(int x, int y) {
+    bool handleClick(int x, int y) {
+        std::cout << x << " " << y << std::endl;
+        std::cout << getMin().x << " " << getMin().y << std::endl;
+        std::cout << getMax().x << " " << getMax().y << std::endl;
         // Check if the click is within the bounds of the button
         if (x >= min.x && x <= max.x && y >= min.y && y <= max.y) {
             std::cout << "Button at memory address: " << this << " clicked!" << std::endl;
-            if (onClick) {
-                onClick();
-            }
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    bool containsPoint(int x, int y) const {
+        return (x >= min.x && x <= max.x && y >= min.y && y <= max.y);
     }
 
     void setOnClick(ClickCallback callback) { onClick = callback; }
@@ -240,6 +324,7 @@ public:
 private:
     std::string label;  // Button label (e.g., "Click Me!")
     ClickCallback onClick;
+    std::string id;
 };
 
 #endif // ELEMENT_HPP

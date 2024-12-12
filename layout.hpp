@@ -52,6 +52,59 @@ public:
         return allElements;
     }
 
+    void clearElements() {
+        elements.clear(); // Clear the vector
+
+        // Recursively clear nested layouts
+        for (Layout* nestedLayout : nestedLayouts) {
+            nestedLayout->clearElements();
+        }
+    }
+
+    Element* getElementAt(const ivec2& position) {
+        // Convert position to float-based vector
+        BaseVec2<float> floatPosition(position.x, position.y);  // or use static_cast if applicable
+
+        // Check if the position is within the bounds of the layout
+        if (floatPosition.x < startPosition.x || floatPosition.y < startPosition.y ||
+            floatPosition.x > endPosition.x || floatPosition.y > endPosition.y) {
+            return nullptr;
+        }
+
+        // Iterate through elements in the current layout
+        for (auto* element : elements) {
+            switch (element->getType()) { // Assume getType() returns an enum or int representing the type
+                case 1: { // Box-specific bounds check
+                    auto* box = dynamic_cast<Box*>(element);
+                    if (box && box->containsPoint(floatPosition)) {
+                        return box;
+                    }
+                    break;
+                }
+                case 2: { // Triangle-specific bounds check
+                    auto* triangle = dynamic_cast<Triangle*>(element);
+                    if (triangle && triangle->containsPoint(floatPosition)) {
+                        return triangle;
+                    }
+                    break;
+                }
+                default:
+                    break; // Unsupported element type
+            }
+        }
+
+        // Recursively search nested layouts
+        for (const auto& nestedLayout : nestedLayouts) {
+            Element* nestedElement = nestedLayout->getElementAt(position);
+            if (nestedElement) {
+                return nestedElement;
+            }
+        }
+
+        // No element found
+        return nullptr;
+    }
+
     void printLayoutElements() const {
         std::cout << "Layout elements for Layout at address: " << this << std::endl;
         std::cout << "Start Position: (" << startPosition.x << ", " << startPosition.y << ")" << std::endl;
@@ -73,6 +126,7 @@ public:
 
     void render(Screen& screen) {
         if (!active) {
+            std::cout << "No rendering" << std::endl;
             return;
         };
 
@@ -100,19 +154,6 @@ public:
 
     ivec2 getStartPosition() const { return startPosition; }
     ivec2 getEndPosition() const { return endPosition; }
-
-    void handleClickEvent(int x, int y) {
-        for (auto& element : elements) {
-            Button* button = dynamic_cast<Button*>(element);
-            if (button) {
-                button->handleClick(x, y);
-            }
-        }
-
-        for (const auto& layout : nestedLayouts) {
-            layout->handleClickEvent(x, y);
-        }
-    }
 
     void handleShowEvent(const std::string& layoutName) {
         if (name == layoutName) {

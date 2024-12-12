@@ -6,6 +6,8 @@
 #include "layout.hpp"
 #include "EventSystem.hpp"
 #include "SoundPlayer.hpp"
+#include <unordered_map>
+#include <vector>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -27,9 +29,12 @@ int main(int argc, char* args[]) {
     }
 
     SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     EventSystem& eventSystem = EventSystem::getInstance();
+
+    std::unordered_map<Layout*, std::vector<Element*>> loadedElements;
 
     // Root layout covering the entire screen
     Layout rootLayout("RootLayout");
@@ -45,35 +50,49 @@ int main(int argc, char* args[]) {
     layout2.setActive(true);
     layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition()); // Right half
 
-    // Define Nested Layout (layout3) within layout1
-    Layout layout3("NestedLayout");
-    layout3.setActive(true);
-    layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
+    Box* boxObj = new Box(vec2(50, 150), vec2(200, 300), vec3(0, 0, 255)); // Blue Box
+    layout1.addElement(boxObj);
+    loadedElements[&layout1].push_back(boxObj);
+    Triangle* triangleObj = new Triangle(vec2(350, 350), vec2(450, 350), vec2(400, 450), vec3(0, 255, 0)); // Green Triangle
+    layout1.addElement(triangleObj); // Green triangle
+    loadedElements[&layout1].push_back(triangleObj);
+    Image* img = new Image("GUIFileUML.png", vec2(0, 200), vec2(300, 500));
+    layout2.addElement(img); // Image
+    loadedElements[&layout2].push_back(img);
 
-    // Add elements to layout1
-    layout1.addElement(new Box(vec2(50, 50), vec2(200, 200), vec3(0, 0, 255))); // Blue box
-    layout1.addElement(new Line(vec2(50, 250), vec2(200, 250), vec3(0, 255, 0))); // Green line
-    layout1.addElement(new Triangle(vec2(100, 300), vec2(150, 400), vec2(50, 400), vec3(255, 255, 255))); // White triangle
-    Button* button = new Button(vec2(100, 300), vec2(200, 500), vec3(0, 0, 0),  "Click Me!");
-    layout1.addElement(button);
+    // Add buttons to the root layout (centered and spaced)
+    const int buttonWidth = 100;
+    const int buttonHeight = 50;
+    const int buttonSpacing = 20;
+    const int totalButtonsWidth = 4 * buttonWidth + 3 * buttonSpacing; // Total width occupied by all buttons and spacing
+    const int startX = (SCREEN_WIDTH - totalButtonsWidth) / 2; // Center buttons horizontally
+    const int startY = 10; // Margin from the top
 
-    // Add elements to layout2
-    layout2.addElement(new Box(vec2(100, 100), vec2(300, 300), vec3(255, 0, 0))); // Red box
-    layout2.addElement(new Line(vec2(400, 400), vec2(600, 200), vec3(255, 255, 0))); // Yellow line
-    layout2.addElement(new Triangle(vec2(600, 100), vec2(650, 200), vec2(550, 200), vec3(0, 255, 255))); // Cyan triangle
+    Button* greenButton = new Button(vec2(startX, startY), vec2(startX + buttonWidth, startY + buttonHeight), vec3(0, 255, 0), "Green");
+    greenButton->setId("greenButton");
+    Button* redButton = new Button(vec2(startX + buttonWidth + buttonSpacing, startY), vec2(startX + 2 * buttonWidth + buttonSpacing, startY + buttonHeight), vec3(255, 0, 0), "Red");
+    redButton->setId("redButton");
+    Button* blueButton = new Button(vec2(startX + 2 * (buttonWidth + buttonSpacing), startY), vec2(startX + 3 * buttonWidth + 2 * buttonSpacing, startY + buttonHeight), vec3(0, 0, 255), "Blue");
+    blueButton->setId("blueButton");
+    Button* yellowButton = new Button(vec2(startX + 3 * (buttonWidth + buttonSpacing), startY), vec2(startX + 4 * buttonWidth + 3 * buttonSpacing, startY + buttonHeight), vec3(255, 255, 0), "Yellow");
+    yellowButton->setId("yellowButton");
 
-    // Add elements to layout3
-    layout3.addElement(new Box(vec2(20, 20), vec2(120, 120), vec3(128, 0, 128))); // Purple box
-    layout3.addElement(new Line(vec2(30, 130), vec2(130, 130), vec3(128, 128, 0))); // Olive line
+    rootLayout.addElement(greenButton);
+    rootLayout.addElement(redButton);
+    rootLayout.addElement(blueButton);
+    rootLayout.addElement(yellowButton);
 
-    // Nest layout3 within layout1
-    layout1.addNestedLayout(&layout3);
+    loadedElements[&rootLayout].push_back(greenButton);
+    loadedElements[&rootLayout].push_back(redButton);
+    loadedElements[&rootLayout].push_back(blueButton);
+    loadedElements[&rootLayout].push_back(yellowButton);
 
-    // // Nest layouts 1 and 2 within the root layout
+    // Nest layouts 1 and 2 within the root layout
     rootLayout.addNestedLayout(&layout1);
     rootLayout.addNestedLayout(&layout2);
 
     eventSystem.setRootLayout(&rootLayout);
+    eventSystem.setLayouts(&layout1, &layout2);
 
     // Create a SoundPlayer instance
     SoundPlayer soundPlayer;
@@ -86,10 +105,6 @@ int main(int argc, char* args[]) {
 
     eventSystem.setSoundPlayer(&soundPlayer);
 
-    // Read in XML file
-    GUIFile guiFile;
-    guiFile.readFile("shapes.xml", rootLayout);
-
     bool quit = false;
     SDL_Event event;
     while (!quit) {
@@ -99,8 +114,19 @@ int main(int argc, char* args[]) {
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     EventSystem::getInstance().addEvent(new ClickEvent(event.button.x, event.button.y));
-                    EventSystem::getInstance().addEvent(new ShowEvent("NestedLayout"));
-                    EventSystem::getInstance().addEvent(new SoundEvent());
+                }
+            } else if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_c) { // Detect C key press
+                    rootLayout.clearElements();
+                    for (auto& pair : loadedElements) {
+                        Layout* layout = pair.first;
+                        std::cout << layout->getStartPosition().x << " " << layout->getStartPosition().y << std::endl;
+                        std::cout << layout->getEndPosition().x << " " << layout->getEndPosition().y << std::endl;
+                        const auto& elements = pair.second;
+                        for (auto element : elements) {
+                            layout->addElement(element);
+                        }
+                    }
                 }
             } else if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) {
                 int newWidth = event.window.data1;
@@ -111,15 +137,13 @@ int main(int argc, char* args[]) {
                 rootLayout.setBounds(0.0f, 0.0f, 1.0f, 1.0f, {0, 0}, {newWidth, newHeight});
                 layout1.setBounds(0.0f, 0.0f, 0.5f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition());
                 layout2.setBounds(0.5f, 0.0f, 1.0f, 1.0f, rootLayout.getStartPosition(), rootLayout.getEndPosition());
-                layout3.setBounds(0.1f, 0.1f, 0.9f, 0.9f, layout1.getStartPosition(), layout1.getEndPosition());
             }
         }
 
+        screen.clear();
+
         // Process all accumulated events
         EventSystem::getInstance().processEvents();
-
-        // Set screen color to gray
-        SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 128, 128, 128));
 
         // Render elements from the root layout, which includes layout1 and layout2
         rootLayout.render(screen);

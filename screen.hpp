@@ -20,6 +20,8 @@ public:
         surface = SDL_CreateRGBSurface(0, width, height, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
         if (!surface) {
             std::cerr << "Failed to create SDL surface: " << SDL_GetError() << std::endl;
+        } else {
+            SDL_FillRect(surface, nullptr, SDL_MapRGB(surface->format, 255, 255, 255));
         }
     }
 
@@ -88,7 +90,7 @@ public:
 
     // Clear the screen
     void clear() {
-        SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
+        SDL_FillRect(surface, nullptr, SDL_MapRGB(surface->format, 255, 255, 255));
     }
 };
 
